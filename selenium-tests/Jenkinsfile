@@ -1,0 +1,49 @@
+pipeline {
+  agent any
+
+  tools {
+    maven 'Maven'
+    jdk 'JDK11'
+  }
+
+  triggers {
+    pollSCM('H/15 * * * *')
+  }
+
+  environment {
+    BASE_URL = 'http://localhost:3000'
+  }
+
+  stages {
+    stage('Checkout') {
+      steps {
+        checkout scm
+      }
+    }
+
+    stage('Build & Test') {
+      steps {
+        dir('selenium-tests') {
+          sh 'mvn clean test -DbaseUrl=${BASE_URL} -Dheadless=true'
+        }
+      }
+    }
+  }
+
+  post {
+    always {
+      dir('selenium-tests') {
+        junit 'target/surefire-reports/*.xml'
+        archiveArtifacts artifacts: 'target/surefire-reports/**', allowEmptyArchive: true
+      }
+      // Install "TestNG Results Analyzer" plugin in Jenkins, then enable this:
+      // publishTestNGResults testResultsPattern: 'selenium-tests/target/surefire-reports/testng-results.xml'
+    }
+    success {
+      echo 'Selenium tests passed!'
+    }
+    failure {
+      echo 'Selenium tests failed!'
+    }
+  }
+}

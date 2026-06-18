@@ -1,0 +1,50 @@
+pipeline {
+  agent any
+
+  triggers {
+    pollSCM('H/15 * * * *')
+  }
+
+  environment {
+    CYPRESS_baseUrl = 'http://localhost:3000'
+  }
+
+  stages {
+    stage('Checkout') {
+      steps {
+        checkout scm
+      }
+    }
+
+    stage('Install') {
+      steps {
+        dir('cypress-tests') {
+          sh 'npm ci'
+        }
+      }
+    }
+
+    stage('Cypress Tests') {
+      steps {
+        dir('cypress-tests') {
+          sh 'npm run cy:run'
+        }
+      }
+    }
+  }
+
+  post {
+    always {
+      dir('cypress-tests') {
+        junit 'cypress/results/*.xml'
+        archiveArtifacts artifacts: 'cypress/screenshots/**,cypress/videos/**', allowEmptyArchive: true
+      }
+    }
+    success {
+      echo 'Cypress tests passed!'
+    }
+    failure {
+      echo 'Cypress tests failed!'
+    }
+  }
+}

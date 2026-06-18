@@ -1,0 +1,14 @@
+{
+  "name": "redbus-cypress-tests",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "test": "cypress run"
+  },
+  "devDependencies": {
+    "cypress": "^14.5.0",
+    "mocha-junit-reporter": "^2.2.1"
+  }
+}
