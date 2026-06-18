@@ -1,0 +1,14 @@
+workflow-aggregator
+git
+github
+pipeline-stage-view
+junit
+htmlpublisher
+maven-plugin
+jdk-tool
+testng-plugin
+timestamper
+ws-cleanup
+credentials-binding
+pipeline-github-lib
+pipeline-graph-analysis

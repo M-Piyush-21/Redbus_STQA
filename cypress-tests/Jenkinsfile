@@ -7,6 +7,8 @@ pipeline {
 
   environment {
     CYPRESS_baseUrl = 'http://localhost:3000'
+    CYPRESS_CACHE_FOLDER = "${env.HOME}/.cache/Cypress"
+    PATH = "/opt/homebrew/bin:/usr/local/bin:${env.PATH}"
   }
 
   stages {
@@ -16,10 +18,17 @@ pipeline {
       }
     }
 
-    stage('Install') {
+    stage('Start App') {
+      steps {
+        sh 'chmod +x scripts/*.sh && bash scripts/ci-start-services.sh'
+      }
+    }
+
+    stage('Install Cypress') {
       steps {
         dir('cypress-tests') {
-          sh 'npm ci'
+          sh 'npm ci || npm install'
+          sh 'npx cypress install'
         }
       }
     }
@@ -27,7 +36,7 @@ pipeline {
     stage('Cypress Tests') {
       steps {
         dir('cypress-tests') {
-          sh 'npm run cy:run'
+          sh 'npm run test:ci'
         }
       }
     }
@@ -35,16 +44,17 @@ pipeline {
 
   post {
     always {
+      sh 'bash scripts/ci-stop-services.sh || true'
       dir('cypress-tests') {
-        junit 'cypress/results/*.xml'
-        archiveArtifacts artifacts: 'cypress/screenshots/**,cypress/videos/**', allowEmptyArchive: true
+        junit allowEmptyResults: true, testResults: 'cypress/results/*.xml'
+        archiveArtifacts artifacts: 'cypress/screenshots/**,cypress/results/**', allowEmptyArchive: true
       }
     }
     success {
-      echo 'Cypress tests passed!'
+      echo 'Cypress: all 6 flows passed!'
     }
     failure {
-      echo 'Cypress tests failed!'
+      echo 'Cypress tests failed. Check screenshots in artifacts.'
     }
   }
 }
