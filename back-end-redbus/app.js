@@ -3,9 +3,9 @@ const app = express();
 const mongoose = require("mongoose");
 const cors = require("cors");
 const { v4: uuidv4 } = require("uuid");
-const stripe = require("stripe")(
-  "REMOVED_SECRET"
-); // add a stripe key, (this test key will expire on 18th march 2021)
+require("dotenv").config();
+
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);// add a stripe key, (this test key will expire on 18th march 2021)
 
 mongoose.pluralize(null);
 app.use(express.json());
