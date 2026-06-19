@@ -11,7 +11,9 @@ import { useLocation } from "react-router-dom";
 
 const BusHire = () => {
   const { search } = useLocation();
-  const [active, setActive] = React.useState("Type of trip");
+  const [active, setActive] = React.useState(() =>
+    new URLSearchParams(search).get("showForm") === "1" ? "Bus Hire Form" : "Type of trip"
+  );
   const currentCustomer = useSelector(
     (state) => state.authReducer.currentCustomer
   );
@@ -42,7 +44,7 @@ const BusHire = () => {
         <div>
           <img
             className={Styles.imageBanner}
-            src="/local/placeholder.svg).svg"
+            src="/local/placeholder.svg"
             alt="banner"
             width="100%"
           />
@@ -53,7 +55,7 @@ const BusHire = () => {
             </div>
             <div>
               <img
-                src="/local/placeholder.svg).svg"
+                src="/local/placeholder.svg"
                 alt=""
               />
             </div>
@@ -66,7 +68,7 @@ const BusHire = () => {
           <div className={Styles.bookInEaschStep}>
             <div>
               <img
-                src="/local/placeholder.svg).svg"
+                src="/local/placeholder.svg"
                 alt="1"
               />
             </div>
@@ -103,7 +105,7 @@ const BusHire = () => {
           <div className={Styles.bookInEaschStep}>
             <div>
               <img
-                src="/local/placeholder.svg).svg"
+                src="/local/placeholder.svg"
                 alt="1"
               />
             </div>
@@ -125,7 +127,7 @@ const BusHire = () => {
             </div>
             <div>
               <img
-                src="/local/placeholder.svg).svg"
+                src="/local/placeholder.svg"
                 alt=""
                 width="202px"
                 height="144px"
@@ -157,7 +159,7 @@ const BusHire = () => {
             </div>
             <div>
               <img
-                src="/local/placeholder.svg).svg"
+                src="/local/placeholder.svg"
                 alt=""
                 width="202px"
                 height="144px"
@@ -263,7 +265,7 @@ const BusHire = () => {
           <div className={Styles.bookInEasySteps_heading}>Vehicle Types</div>
           <div className={Styles.vehicleTypeImage}>
             <img
-              src="/local/placeholder.svg).svg"
+              src="/local/placeholder.svg"
               alt="Buses and Mini Buses"
             ></img>
             <div className={Styles.vehicleText}>
@@ -276,7 +278,7 @@ const BusHire = () => {
           </div>
           <div className={Styles.vehicleTypeImage}>
             <img
-              src="/local/placeholder.svg).svg"
+              src="/local/placeholder.svg"
               alt="Buses and Mini Buses"
             ></img>
             <div className={Styles.vehicleText}>
@@ -290,7 +292,7 @@ const BusHire = () => {
           </div>
           <div className={Styles.vehicleTypeImage}>
             <img
-              src="/local/placeholder.svg).svg"
+              src="/local/placeholder.svg"
               alt="Buses and Mini Buses"
             ></img>
             <div className={Styles.vehicleText}>

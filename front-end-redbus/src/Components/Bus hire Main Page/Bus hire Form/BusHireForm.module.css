@@ -17,6 +17,7 @@ body {
   top: 6.5%;
   max-height: 85vh;
   overflow-y: auto;
+  z-index: 1000;
 }
 .outstationHeading {
   display: flex;

@@ -16,55 +16,38 @@ const EXTERNAL_BLOCK = [
   "**/duckduckgo.com/**",
 ];
 
-function apiPath(url) {
-  try {
-    return new URL(url).pathname.replace(/\/$/, "") || "/";
-  } catch {
-    return url;
-  }
-}
-
 function registerSampleApiMocks() {
   EXTERNAL_BLOCK.forEach((pattern) => {
     cy.intercept("GET", pattern, { ...OK, body: "", headers: { "content-type": "image/gif" } });
   });
 
-  cy.intercept("GET", "**/local/placeholder.svg", { ...OK, fixture: "placeholder.svg" });
+  cy.intercept("GET", "**/local/placeholder.svg*", { ...OK, fixture: "placeholder.svg" });
 
-  cy.intercept("GET", "**/v1/api/**", (req) => {
-    const path = apiPath(req.url);
+  cy.intercept("GET", "**/v1/api/routes", { ...OK, fixture: "routes.json" }).as("routesApi");
 
-    if (path === "/v1/api/routes") {
-      req.reply({ ...OK, fixture: "routes.json" });
-      return;
-    }
-    if (path.includes("/Lucknow/Delhi/")) {
-      req.reply({ ...OK, fixture: "bus-search-lucknow-delhi.json" });
-      return;
-    }
-    if (path.includes("/Lucknow/Allahabad/")) {
-      req.reply({ ...OK, fixture: "bus-search-lucknow-allahabad.json" });
-      return;
-    }
-    if (path === "/v1/api/busservice") {
-      req.reply({ ...OK, fixture: "bus-services.json" });
-      return;
-    }
-    if (path.startsWith("/v1/api/busservice/")) {
-      req.reply({ ...OK, fixture: "bus-service-detail.json" });
-      return;
-    }
-    if (path.startsWith("/v1/api/bookingHire/")) {
-      req.reply({ ...OK, body: [] });
-      return;
-    }
-    if (path.startsWith("/v1/api/booking/")) {
-      req.reply({ ...OK, body: [] });
-      return;
-    }
+  cy.intercept("GET", "**/v1/api/routes/Lucknow/Delhi/**", {
+    ...OK,
+    fixture: "bus-search-lucknow-delhi.json",
+  }).as("busSearchApi");
 
-    req.reply({ ...OK, body: {} });
-  }).as("apiCall");
+  cy.intercept("GET", "**/v1/api/routes/Lucknow/Allahabad/**", {
+    ...OK,
+    fixture: "bus-search-lucknow-allahabad.json",
+  }).as("busSearchApi");
+
+  // Detail must be registered before list — /busservice/ has an id segment
+  cy.intercept("GET", /\/v1\/api\/busservice\/[^/]+$/, {
+    ...OK,
+    fixture: "bus-service-detail.json",
+  }).as("busServiceDetailApi");
+
+  cy.intercept("GET", /\/v1\/api\/busservice\/?(\?.*)?$/, {
+    ...OK,
+    fixture: "bus-services.json",
+  }).as("busServiceApi");
+
+  cy.intercept("GET", "**/v1/api/bookingHire/**", { ...OK, body: [] });
+  cy.intercept("GET", "**/v1/api/booking/**", { ...OK, body: [] });
 
   cy.intercept("POST", "**/v1/api/customers", {
     ...OK,

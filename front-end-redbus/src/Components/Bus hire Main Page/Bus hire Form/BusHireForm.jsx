@@ -23,12 +23,14 @@ const BusHireForm = ({ handleClick }) => {
 
   const handleProceed = (e) => {
     e.preventDefault();
+    const form = e.currentTarget;
+    const fd = new FormData(form);
     const params = new URLSearchParams({
-      pickUp: formValues.pickUp,
-      drop: formValues.drop,
-      pickUpDate: formValues.pickUpDate,
-      dropDate: formValues.dropDate,
-      totalPassengers: formValues.totalPassengers,
+      pickUp: fd.get("pickUp") || formValues.pickUp,
+      drop: fd.get("drop") || formValues.drop,
+      pickUpDate: fd.get("pickUpDate") || formValues.pickUpDate,
+      dropDate: fd.get("dropDate") || formValues.dropDate,
+      totalPassengers: fd.get("totalPassengers") || formValues.totalPassengers,
     });
     history.push(`/bus-hire-card?${params.toString()}`);
   };
@@ -39,7 +41,7 @@ const BusHireForm = ({ handleClick }) => {
           <FaLongArrowAltLeft onClick={handleClick} />
           <div style={{ marginLeft: "20px" }}>Outstation</div>
         </div>
-        <form>
+        <form onSubmit={handleProceed}>
           <div
             style={{
               display: "flex",
@@ -133,10 +135,9 @@ const BusHireForm = ({ handleClick }) => {
               />
             </div>
             <button
-              type="button"
+              type="submit"
               className={Styles.proceedDiv}
               data-testid="hire-proceed-btn"
-              onClick={handleProceed}
             >
               Proceed
             </button>

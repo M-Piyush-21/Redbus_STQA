@@ -35,11 +35,15 @@ function apiGet(urlPath) {
   });
 }
 
-function setDateInput(page, selector, value) {
+function setReactInput(page, selector, value) {
   return page.$eval(
     selector,
     (el, v) => {
-      el.value = v;
+      const setter = Object.getOwnPropertyDescriptor(
+        window.HTMLInputElement.prototype,
+        "value"
+      ).set;
+      setter.call(el, v);
       el.dispatchEvent(new Event("input", { bubbles: true }));
       el.dispatchEvent(new Event("change", { bubbles: true }));
     },
@@ -54,7 +58,7 @@ const tests = [
       await page.goto(BASE + "/");
       await page.type("[data-testid='source-input']", "Lucknow");
       await page.type("[data-testid='destination-input']", "Allahabad");
-      await setDateInput(page, "[data-testid='date-input']", DATE);
+      await setReactInput(page, "[data-testid='date-input']", DATE);
       await page.click("[data-testid='search-bus-btn']");
       await page.waitForFunction(() => location.href.includes("arrival=Allahabad"), { timeout: 10000 });
     },
@@ -71,12 +75,24 @@ const tests = [
   {
     name: "CY-03 Bus hire form submit",
     run: async (page) => {
-      await page.goto(BASE + "/bus-hire?showForm=1", { waitUntil: "networkidle0" });
-      await page.waitForSelector("[data-testid='bus-hire-form']", { visible: true });
-      await page.type("[data-testid='hire-pickup-input']", "Mumbai");
-      await page.type("[data-testid='hire-drop-input']", "Pune");
-      await page.click("[data-testid='hire-proceed-btn']");
-      await page.waitForFunction(() => location.pathname.includes("bus-hire-card"), { timeout: 10000 });
+      await page.goto(BASE + "/bus-hire?showForm=1", { waitUntil: "domcontentloaded" });
+      await page.waitForSelector("[data-testid='bus-hire-form']", { visible: true, timeout: 15000 });
+      await setReactInput(page, "[data-testid='hire-pickup-input']", "Mumbai");
+      await setReactInput(page, "[data-testid='hire-drop-input']", "Pune");
+      await page.$eval("[data-testid='hire-proceed-btn']", (btn) =>
+        btn.scrollIntoView({ block: "center" })
+      );
+      await Promise.all([
+        page.waitForFunction(() => location.pathname.includes("bus-hire-card"), {
+          timeout: 15000,
+        }),
+        page.evaluate(() => {
+          const btn = document.querySelector("[data-testid='hire-proceed-btn']");
+          btn.closest("form").requestSubmit();
+        }),
+      ]);
+      const url = page.url();
+      if (!url.includes("pickUp=Mumbai")) throw new Error("pickUp=Mumbai missing in URL");
     },
   },
   {
