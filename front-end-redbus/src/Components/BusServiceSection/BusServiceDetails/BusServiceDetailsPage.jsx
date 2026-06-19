@@ -14,8 +14,8 @@ const BusServiceDetailsPage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const currentBus = useSelector((state) => state.busServiceReducer.currentBus);
-  console.log(currentBus);
   const isLoading = useSelector((state) => state.busServiceReducer.isLoading);
+  const error = useSelector((state) => state.busServiceReducer.error);
   const currentCustomer = useSelector(
     (state) => state.authReducer.currentCustomer
   );
@@ -31,9 +31,11 @@ const BusServiceDetailsPage = () => {
     dispatch(getBusOnIdThunk(id));
   }, [id,dispatch]);
   return isLoading ? (
-    <div>...Loading...</div>
+    <div data-testid="bus-hire-details-loading">Loading...</div>
+  ) : error || !currentBus?._id ? (
+    <div data-testid="bus-hire-details-error">Unable to load vehicle details.</div>
   ) : (
-    <div className={styles.detailsContainer}>
+    <div className={styles.detailsContainer} data-testid="bus-hire-details-page">
       <div className={styles.detailsLeftContainer}>
 
         <div>

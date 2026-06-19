@@ -46,7 +46,7 @@ const TripTypeContainer = ({ handleClick }) => {
             </div>
             <div>
               <img
-                src="https://www.redbus.in/bushire/static/images/asset_outstation.png"
+                src="/local/placeholder.svg"
                 alt=""
                 height="90px"
               />
@@ -63,7 +63,7 @@ const TripTypeContainer = ({ handleClick }) => {
             </div>
             <div>
               <img
-                src="https://www.redbus.in/bushire/static/images/asset_local.png"
+                src="/local/placeholder.svg"
                 alt=""
                 height="90px"
               />
@@ -80,7 +80,7 @@ const TripTypeContainer = ({ handleClick }) => {
             </div>
             <div>
               <img
-                src="https://www.redbus.in/bushire/static/images/asset_airport.png"
+                src="/local/placeholder.svg"
                 alt=""
                 height="90px"
               />

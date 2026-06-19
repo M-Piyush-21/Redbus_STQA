@@ -18,7 +18,13 @@ const getBusMongoSuccess = (payload) => {
 
 const getBusMongoFailure = () => {
   return {
-    type: actionTypes.GET_BUS_MONGO_SUCCESS,
+    type: actionTypes.GET_BUS_MONGO_FAILURE,
+  };
+};
+
+const getBusOnIdFailure = () => {
+  return {
+    type: actionTypes.GET_BUS_MONGO_FAILURE,
   };
 };
 
@@ -50,6 +56,6 @@ const getBusOnIdThunk = (id) => (dispatch) => {
       console.log("response for id");
       dispatch(getBusOnId(res.data));
     })
-    .catch((err) => dispatch(getBusMongoFailure()));
+    .catch((err) => dispatch(getBusOnIdFailure()));
 };
 export { getBusData2, getBusOnIdThunk };

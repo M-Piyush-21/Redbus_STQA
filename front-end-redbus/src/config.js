@@ -1,8 +1,12 @@
-export const API_BASE_URL =
-  process.env.NODE_ENV === "development"
+export const USE_SAMPLE_DATA =
+  process.env.REACT_APP_USE_SAMPLE_DATA === "true" ||
+  process.env.NODE_ENV === "development";
+
+export const API_BASE_URL = USE_SAMPLE_DATA
+  ? ""
+  : process.env.NODE_ENV === "development"
     ? ""
-    : process.env.REACT_APP_BACKEND_URL ||
-      "https://redbus-backend-udit.herokuapp.com";
+    : process.env.REACT_APP_BACKEND_URL || "";
 
 export const GOOGLE_CLIENT_ID =
   process.env.REACT_APP_GOOGLE_CLIENT_ID ||

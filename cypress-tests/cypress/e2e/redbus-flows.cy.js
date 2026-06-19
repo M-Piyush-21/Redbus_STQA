@@ -1,63 +1,68 @@
 const SEARCH_DATE = "2026-12-20";
 
-describe("Flow 1 - Landing page loads", () => {
-  it("shows search form elements", () => {
-    cy.visit("/");
-    cy.get("[data-testid='search-bus-btn']").should("be.visible");
-    cy.get("[data-testid='source-input']").should("be.visible");
-    cy.get("[data-testid='destination-input']").should("be.visible");
-    cy.get("[data-testid='date-input']").should("be.visible");
-  });
-});
+// 6 UNIQUE Cypress flows — sample fixtures return 200, no live backend needed
 
-describe("Flow 2 - Bus search", () => {
-  it("navigates to select-bus for Lucknow to Delhi", () => {
+describe("CY-01 Bus search Lucknow to Allahabad", () => {
+  it("navigates to select-bus for a different route", () => {
     cy.visit("/");
-    cy.get("[data-testid='source-input']").type("Lucknow");
-    cy.get("[data-testid='destination-input']").type("Delhi");
-    cy.get("[data-testid='date-input']").type(SEARCH_DATE);
+    cy.wait("@apiCall").its("response.statusCode").should("eq", 200);
+    cy.get("[data-testid='source-input']").type("Lucknow", { force: true });
+    cy.get("[data-testid='destination-input']").type("Allahabad", { force: true });
+    cy.get("[data-testid='date-input']").type(SEARCH_DATE, { force: true });
     cy.get("[data-testid='search-bus-btn']").click();
     cy.url().should("include", "/select-bus");
-    cy.url().should("include", "departure=Lucknow");
-    cy.url().should("include", "arrival=Delhi");
+    cy.url().should("include", "arrival=Allahabad");
+    cy.wait("@apiCall").its("response.statusCode").should("eq", 200);
   });
 });
 
-describe("Flow 3 - Select bus page", () => {
-  it("shows route header with cities and date", () => {
+describe("CY-02 Select bus loads bus list", () => {
+  it("shows bus list container after API loads", () => {
     cy.visit(`/select-bus?departure=Lucknow&arrival=Delhi&date=${SEARCH_DATE}`);
-    cy.get("[data-testid='select-bus-header']")
-      .should("contain", "Lucknow")
-      .and("contain", "Delhi")
-      .and("contain", SEARCH_DATE);
+    cy.wait("@apiCall").its("response.statusCode").should("eq", 200);
+    cy.get("[data-testid='bus-list-container']").should("be.visible");
+    cy.get("[data-testid='bus-list-container']").should("not.contain", "Unable to load buses");
+    cy.get("[data-testid='bus-list-container']").should("not.contain", "No Bus Found");
   });
 });
 
-describe("Flow 4 - Bus hire page", () => {
-  it("opens bus hire from navbar", () => {
-    cy.visit("/");
-    cy.get("[data-testid='bus-hire-link']").click();
-    cy.url().should("include", "/bus-hire");
-    cy.contains("Bus Hire").should("be.visible");
+describe("CY-03 Bus hire form submit", () => {
+  it("fills hire form and proceeds to quotations", () => {
+    cy.visit("/bus-hire?showForm=1");
+    cy.get("[data-testid='bus-hire-form']").should("be.visible");
+    cy.get("[data-testid='hire-pickup-input']").type("Mumbai");
+    cy.get("[data-testid='hire-drop-input']").type("Pune");
+    cy.get("[data-testid='hire-proceed-btn']").scrollIntoView().click({ force: true });
+    cy.url().should("include", "/bus-hire-card");
+    cy.url().should("include", "pickUp=Mumbai");
+    cy.wait("@apiCall").its("response.statusCode").should("eq", 200);
   });
 });
 
-describe("Flow 5 - Bus hire quotations", () => {
-  it("loads hire card page with quotations", () => {
+describe("CY-04 Bus hire details page", () => {
+  it("loads vehicle details from API", () => {
     cy.visit(
-      "/bus-hire-card?pickUp=Mumbai&drop=Pune&pickUpDate=2026-12-20&dropDate=2026-12-21&totalPassengers=4"
+      "/bus-hire-details/sample-hire-1?pickUp=Mumbai&drop=Pune&pickUpDate=2026-12-20&dropDate=2026-12-21&totalPassengers=2"
     );
-    cy.get("[data-testid='bus-hire-card-page']").should("be.visible");
-    cy.contains(/quotation/i).should("exist");
+    cy.wait("@apiCall").its("response.statusCode").should("eq", 200);
+    cy.get("[data-testid='bus-hire-details-page']").should("be.visible");
+    cy.contains("Trip Summary").should("be.visible");
   });
 });
 
-describe("Flow 6 - Profile and error pages", () => {
-  it("loads profile page and 404 page", () => {
+describe("CY-05 Profile hired bus tab", () => {
+  it("switches to hired bus section", () => {
     cy.visit("/my-profile");
-    cy.get("[data-testid='profile-page']").should("be.visible");
+    cy.get("[data-testid='hired-bus-tab']").click();
+    cy.get("[data-testid='hired-bus-section']").should("be.visible");
+  });
+});
 
-    cy.visit("/this-route-does-not-exist");
-    cy.get("[data-testid='error-page']").should("be.visible");
+describe("CY-06 Profile my profile tab", () => {
+  it("shows contact details section", () => {
+    cy.visit("/my-profile");
+    cy.get("[data-testid='my-profile-tab']").click();
+    cy.get("[data-testid='my-profile-section']").should("be.visible");
+    cy.contains("Contact Details").should("be.visible");
   });
 });

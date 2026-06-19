@@ -21,6 +21,14 @@ exports.getOneRoute = async (req, res) => {
     );
   });
 
+  if (!route) {
+    return res.status(404).send({
+      route: null,
+      matchedBuses: [],
+      busIdWithSeatsObj: {},
+    });
+  }
+
   // get all buses for that route
   let buses = await Bus.find();
   let matchedBuses = buses.filter((bus) => {

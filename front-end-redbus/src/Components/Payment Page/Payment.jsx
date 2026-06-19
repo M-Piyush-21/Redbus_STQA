@@ -136,7 +136,7 @@ const Payment = () => {
           <div className={Styles.payment__fullContainer_rightContainer_infobar}>
             <div className={Styles.banner_chip}>
               <img
-                src="https://s3.rdbuz.com/Images/webplatform/Common/Payment/safe-payments.svg"
+                src="/local/placeholder.svg"
                 alt="CC"
               />
               <div className={Styles.banner_text}>
@@ -146,7 +146,7 @@ const Payment = () => {
             </div>
             <div className={Styles.banner_chip}>
               <img
-                src="https://s3.rdbuz.com/Images/webplatform/Common/Payment/transactions.svg"
+                src="/local/placeholder.svg"
                 alt="Million Transactions"
               />
               <div className={Styles.banner_text}>
@@ -156,7 +156,7 @@ const Payment = () => {
             </div>
             <div className={Styles.banner_chip}>
               <img
-                src="https://s3.rdbuz.com/Images/webplatform/Common/Payment/trust.svg"
+                src="/local/placeholder.svg"
                 alt="Reliable"
               />
               <div className={Styles.banner_text}>
@@ -201,17 +201,17 @@ const Payment = () => {
                 <div className={Styles.paymentIconList}>
                   <img
                     className={Styles.payment_icon_img}
-                    src="https://st.redbus.in/paas/images/mobile/v2/visa.png"
+                    src="/local/placeholder.svg"
                     alt=""
                   />
                   <img
                     className={Styles.payment_icon_img}
-                    src="https://st.redbus.in/paas/images/mobile/v2/mastercard.png"
+                    src="/local/placeholder.svg"
                     alt=""
                   />
                   <img
                     className={Styles.payment_icon_img}
-                    src="https://st.redbus.in/paas/images/web/v2/maestro.png"
+                    src="/local/placeholder.svg"
                     alt=""
                   />
                 </div>
@@ -226,17 +226,17 @@ const Payment = () => {
                 <div className={Styles.paymentIconList}>
                   <img
                     className={Styles.payment_icon_img}
-                    src="https://st.redbus.in/paas/images/mobile/v2/visa.png"
+                    src="/local/placeholder.svg"
                     alt=""
                   />
                   <img
                     className={Styles.payment_icon_img}
-                    src="https://st.redbus.in/paas/images/mobile/v2/mastercard.png"
+                    src="/local/placeholder.svg"
                     alt=""
                   />
                   <img
                     className={Styles.payment_icon_img}
-                    src="https://st.redbus.in/paas/images/web/v2/maestro.png"
+                    src="/local/placeholder.svg"
                     alt=""
                   />
                 </div>
@@ -250,7 +250,7 @@ const Payment = () => {
                 <div className={Styles.radioButtonText}>Wallets</div>
                 <img
                   className={Styles.payment_icon_img}
-                  src="https://st.redbus.in/paas/images/web/v2/amazonpay.png"
+                  src="/local/placeholder.svg"
                   alt=""
                 />
               </div>
@@ -264,27 +264,27 @@ const Payment = () => {
                 <div className={Styles.paymentIconList}>
                   <img
                     className={Styles.payment_icon_img}
-                    src="https://st.redbus.in/paas/images/web/v2/axis.png"
+                    src="/local/placeholder.svg"
                     alt=""
                   />
                   <img
                     className={Styles.payment_icon_img}
-                    src="https://st.redbus.in/paas/images/web/v2/sbi.png"
+                    src="/local/placeholder.svg"
                     alt=""
                   />
                   <img
                     className={Styles.payment_icon_img}
-                    src="https://st.redbus.in/paas/images/web/v2/hdfc.png"
+                    src="/local/placeholder.svg"
                     alt=""
                   />
                   <img
                     className={Styles.payment_icon_img}
-                    src="https://st.redbus.in/paas/images/web/v2/icici.png"
+                    src="/local/placeholder.svg"
                     alt=""
                   />
                   <img
                     className={Styles.payment_icon_img}
-                    src="https://st.redbus.in/paas/images/web/v2/kotak.png"
+                    src="/local/placeholder.svg"
                     alt=""
                   />
                 </div>
@@ -318,17 +318,17 @@ const Payment = () => {
                 <div className={Styles.paymentIconList}>
                   <img
                     className={Styles.payment_icon_img}
-                    src="https://st.redbus.in/paas/images/web/v2/upi/gpay.svg"
+                    src="/local/placeholder.svg"
                     alt=""
                   />
                   <img
                     className={Styles.payment_icon_img}
-                    src="https://st.redbus.in/paas/images/web/v2/upi/phonepe.svg"
+                    src="/local/placeholder.svg"
                     alt=""
                   />
                   <img
                     className={Styles.payment_icon_img}
-                    src="https://st.redbus.in/paas/images/web/v2/upi/amazonpay.svg"
+                    src="/local/placeholder.svg"
                     alt=""
                   />
                 </div>
@@ -350,17 +350,17 @@ const Payment = () => {
                 <div className={Styles.paymentIconList}>
                   <img
                     className={Styles.payment_icon_img}
-                    src="https://st.redbus.in/paas/images/web/v2/upi/gpay.svg"
+                    src="/local/placeholder.svg"
                     alt=""
                   />
                   <img
                     className={Styles.payment_icon_img}
-                    src="https://st.redbus.in/paas/images/web/v2/upi/phonepe.svg"
+                    src="/local/placeholder.svg"
                     alt=""
                   />
                   <img
                     className={Styles.payment_icon_img}
-                    src="https://st.redbus.in/paas/images/web/v2/upi/amazonpay.svg"
+                    src="/local/placeholder.svg"
                     alt=""
                   />
                 </div>
@@ -455,7 +455,7 @@ const Payment = () => {
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <div className={Styles.travel_title}>FARE BREAKUP</div>
               <img
-                src="https://s3.rdbuz.com/Images/webplatform/Common/Payment/down.svg"
+                src="/local/placeholder.svg"
                 width="14"
                 height="14"
                 alt=""
@@ -499,17 +499,17 @@ const Payment = () => {
           >
             <img
               className={Styles.payment_banner_icon_img}
-              src="https://s3.rdbuz.com/Images/webplatform/Common/Payment/master-card-secure-code.png"
+              src="/local/placeholder.svg"
               alt=""
             />
             <img
               className={Styles.payment_banner_icon_img}
-              src="https://s3.rdbuz.com/Images/webplatform/Common/Payment/verified-by-visa.svg"
+              src="/local/placeholder.svg"
               alt=""
             />
             <img
               className={Styles.payment_banner_icon_img}
-              src="https://s3.rdbuz.com/Images/webplatform/Common/Payment/verisign-secured.png"
+              src="/local/placeholder.svg"
               alt=""
             />
           </div>

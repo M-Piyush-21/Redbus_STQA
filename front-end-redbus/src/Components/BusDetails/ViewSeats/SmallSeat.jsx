@@ -18,7 +18,7 @@ const SmallSeat = ({
     color = { color: "black" };
   }
 
-  if (alreadyBookedSeats.includes(seatNo)) {
+  if ((alreadyBookedSeats || []).includes(seatNo)) {
     color = { color: "red" };
   }
 
@@ -30,7 +30,7 @@ const SmallSeat = ({
     console.log(customerName);
     if (customerName === null) {
       alert("Please Login, To Book Seats");
-    } else if (!alreadyBookedSeats.includes(seatNo)) {
+    } else if (!(alreadyBookedSeats || []).includes(seatNo)) {
       handleSelectedSeats(seatNo);
     }
   };

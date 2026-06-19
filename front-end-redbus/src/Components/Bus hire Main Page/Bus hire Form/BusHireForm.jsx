@@ -3,7 +3,7 @@ import Styles from "./BusHireForm.module.css";
 import { FaRegDotCircle } from "react-icons/fa";
 import { HiLocationMarker } from "react-icons/hi";
 import { FaLongArrowAltLeft } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 let initState = {
   pickUp: "",
   drop: "",
@@ -13,15 +13,28 @@ let initState = {
   dropDate: "",
 };
 const BusHireForm = ({ handleClick }) => {
+  const history = useHistory();
   const [formValues, setFormValues] = React.useState(initState);
 
   const handleChange = (e) => {
     let { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
   };
+
+  const handleProceed = (e) => {
+    e.preventDefault();
+    const params = new URLSearchParams({
+      pickUp: formValues.pickUp,
+      drop: formValues.drop,
+      pickUpDate: formValues.pickUpDate,
+      dropDate: formValues.dropDate,
+      totalPassengers: formValues.totalPassengers,
+    });
+    history.push(`/bus-hire-card?${params.toString()}`);
+  };
   return (
     <div>
-      <div className={Styles.BusHireFormcontainer}>
+      <div className={Styles.BusHireFormcontainer} data-testid="bus-hire-form">
         <div className={Styles.outstationHeading}>
           <FaLongArrowAltLeft onClick={handleClick} />
           <div style={{ marginLeft: "20px" }}>Outstation</div>
@@ -45,6 +58,7 @@ const BusHireForm = ({ handleClick }) => {
                   placeholder="Enter your Pickup location"
                   value={formValues.pickUp}
                   name="pickUp"
+                  data-testid="hire-pickup-input"
                   onChange={(e) => handleChange(e)}
                 />
               </div>
@@ -64,6 +78,7 @@ const BusHireForm = ({ handleClick }) => {
                   placeholder="Enter your Destination "
                   value={formValues.drop}
                   name="drop"
+                  data-testid="hire-drop-input"
                   onChange={(e) => handleChange(e)}
                 />
               </div>
@@ -117,15 +132,14 @@ const BusHireForm = ({ handleClick }) => {
                 onChange={(e) => handleChange(e)}
               />
             </div>
-            <Link
-              to={`bus-hire-card?pickUp=${formValues.pickUp}&drop=${formValues.drop}&pickUpDate=${formValues.pickUpDate}&dropDate=${formValues.dropDate}&totalPassengers=${formValues.totalPassengers}`}
+            <button
+              type="button"
+              className={Styles.proceedDiv}
+              data-testid="hire-proceed-btn"
+              onClick={handleProceed}
             >
-              <input
-                type="submit"
-                className={Styles.proceedDiv}
-                value="Proceed"
-              />
-            </Link>
+              Proceed
+            </button>
           </div>
         </form>
       </div>

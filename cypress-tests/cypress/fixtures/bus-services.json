@@ -1,0 +1,20 @@
+{
+  "data": [
+    {
+      "_id": "sample-hire-1",
+      "vehicle": "Tempo Traveller 12 Seater",
+      "img": "/local/placeholder.svg",
+      "total": 8500,
+      "price": 4913,
+      "available": true
+    },
+    {
+      "_id": "sample-hire-2",
+      "vehicle": "Mini Bus 20 Seater",
+      "img": "/local/placeholder.svg",
+      "total": 12000,
+      "price": 6500,
+      "available": true
+    }
+  ]
+}

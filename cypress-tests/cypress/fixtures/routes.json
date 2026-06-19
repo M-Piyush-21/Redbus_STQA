@@ -1,0 +1,14 @@
+[
+  {
+    "_id": "sample-route-lucknow-delhi",
+    "departureLocation": { "name": "Lucknow", "subLocations": ["Charbagh", "Alambagh"] },
+    "arrivalLocation": { "name": "Delhi", "subLocations": ["Kashmere Gate", "Anand Vihar"] },
+    "duration": 8
+  },
+  {
+    "_id": "sample-route-lucknow-allahabad",
+    "departureLocation": { "name": "Lucknow", "subLocations": ["Charbagh"] },
+    "arrivalLocation": { "name": "Allahabad", "subLocations": ["Civil Lines"] },
+    "duration": 5
+  }
+]

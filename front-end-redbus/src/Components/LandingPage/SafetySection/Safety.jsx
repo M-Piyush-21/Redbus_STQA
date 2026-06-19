@@ -24,7 +24,7 @@ const Safety = () => {
     <div className={styles.mainContainer}>
       <div className={styles.imgBox}>
         <img
-          src="https://s3.rdbuz.com/Images/webplatform/measures/safetyplus.svg"
+          src="/local/placeholder.svg"
           alt="shield"
         />
       </div>

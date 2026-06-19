@@ -1,9 +1,11 @@
 const Booking = require("../models/boooking");
 exports.addBooking = async (req, res) => {
-  // code here
-  const booking = await Booking.create(req.body);
-  //console.log(booking);
-  res.send(booking);
+  try {
+    const booking = await Booking.create(req.body);
+    res.send(booking);
+  } catch (err) {
+    res.status(400).send({ error: err.message });
+  }
 };
 exports.getBooking = async (req, res) => {
   // code here

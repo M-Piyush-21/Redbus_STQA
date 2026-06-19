@@ -38,7 +38,7 @@ const Title = () => {
     <div className={styles.title}>
       <div className={styles.img}>
         <img
-          src="https://img.rawpixel.com/s3fs-private/rawpixel_images/website_content/k-43-achi-77903-lyj3636-5-journey.jpg?w=1000&dpr=1&fit=default&crop=default&q=65&vib=3&con=3&usm=15&bg=F4F4F3&ixlib=js-2.2.1&s=98dd8fc2e2bcc39fc4d4b134dc38bb19"
+          src="/local/placeholder.svg"
           alt="bus"
         />
       </div>

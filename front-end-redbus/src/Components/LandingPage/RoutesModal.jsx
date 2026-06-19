@@ -29,7 +29,7 @@ export default function RoutesModal() {
   const classes = useStyles();
 
   return (
-    <div>
+    <div data-testid="routes-modal-table">
       <div>
         <b style={{ color: "red", fontSize: "20px", height: "70px" }}>
           Note: Currently we are serving our customers only in the below

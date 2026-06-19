@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="180" viewBox="0 0 320 180">
+  <rect width="320" height="180" fill="#e8eef5"/>
+  <rect x="40" y="70" width="240" height="60" rx="8" fill="#d84e55"/>
+  <circle cx="90" cy="140" r="18" fill="#3e3e52"/>
+  <circle cx="230" cy="140" r="18" fill="#3e3e52"/>
+  <text x="160" y="105" text-anchor="middle" fill="#fff" font-family="Arial,sans-serif" font-size="16">RedBus</text>
+</svg>

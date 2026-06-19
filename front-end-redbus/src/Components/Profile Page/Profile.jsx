@@ -40,6 +40,7 @@ const Profile = () => {
 
           <li
             className={Styles.leftPannel_eachListOption}
+            data-testid="my-trips-tab"
             onClick={() => handleListItemClick("trips")}
           >
             <BiPin style={{ color: "grey", fontSize: "30px" }} />
@@ -48,6 +49,7 @@ const Profile = () => {
           <div className={Styles.line}></div>
           <li
             className={Styles.leftPannel_eachListOption}
+            data-testid="hired-bus-tab"
             onClick={() => handleListItemClick("hiredBuses")}
           >
             <BiPin style={{ color: "grey", fontSize: "30px" }} />
@@ -63,6 +65,7 @@ const Profile = () => {
           <div className={Styles.line}></div>
           <li
             className={Styles.leftPannel_eachListOption}
+            data-testid="my-profile-tab"
             onClick={() => handleListItemClick("profile")}
           >
             <AiOutlineSetting style={{ color: "grey", fontSize: "30px" }} />
@@ -82,11 +85,19 @@ const Profile = () => {
         </ul>
       </div>
       <div className={Styles.seprator}></div>
-      {selectedItem === "hiredBuses" ? <HiredBuses /> : null}
-      {selectedItem === "trips" ? <MyTrips /> : null}
+      {selectedItem === "hiredBuses" ? (
+        <div data-testid="hired-bus-section">
+          <HiredBuses />
+        </div>
+      ) : null}
+      {selectedItem === "trips" ? (
+        <div data-testid="my-trips-section">
+          <MyTrips />
+        </div>
+      ) : null}
       {selectedItem === "wallet" ? "Wallet feature coming soon..." : null}
       {selectedItem === "profile" ? (
-        <div className={Styles.rightPannel}>
+        <div className={Styles.rightPannel} data-testid="my-profile-section">
           <span className={Styles.profileHeading}> My Profile</span>
           <div className={Styles.profilebox}>
             <div style={{ display: "flex", justifyContent: "space-between" }}>

@@ -194,7 +194,7 @@ const FAQ = () => {
                         <div className={Styles.faqDivText}>
                             What is redBus Hire?
                             </div>
-                        {arrow1 === "downArrow" && <img src="https://www.redbus.in/bushire/static/mwebv2/home/ic-arrow-down-color.svg" alt="" onClick={handleArrow1} />}
+                        {arrow1 === "downArrow" && <img src="/local/placeholder.svg" alt="" onClick={handleArrow1} />}
                         {arrow1 === "upArrow" && <RiArrowDropUpLine style={{ fontSize: "25px" }} onClick={handleArrow1} />}
 
                     </div>
@@ -204,7 +204,7 @@ const FAQ = () => {
                         <div className={Styles.faqDivText}>
                             How does it work?
                             </div>
-                        {arrow2 === "downArrow" && <img src="https://www.redbus.in/bushire/static/mwebv2/home/ic-arrow-down-color.svg" alt="" onClick={handleArrow2} />}
+                        {arrow2 === "downArrow" && <img src="/local/placeholder.svg" alt="" onClick={handleArrow2} />}
                         {arrow2 === "upArrow" && <RiArrowDropUpLine style={{ fontSize: "25px" }} onClick={handleArrow2} />}
                     </div>
                     {arrow2 === "upArrow" &&
@@ -213,7 +213,7 @@ const FAQ = () => {
                         <div className={Styles.faqDivText}>
                             Which cities are you operational in?
                             </div>
-                        {arrow3 === "downArrow" && <img src="https://www.redbus.in/bushire/static/mwebv2/home/ic-arrow-down-color.svg" alt="" onClick={handleArrow3} />}
+                        {arrow3 === "downArrow" && <img src="/local/placeholder.svg" alt="" onClick={handleArrow3} />}
                         {arrow3 === "upArrow" && <RiArrowDropUpLine style={{ fontSize: "25px" }} onClick={handleArrow3} />}
                     </div>
                     {arrow3 === "upArrow" &&
@@ -222,7 +222,7 @@ const FAQ = () => {
                         <div className={Styles.faqDivText}>
                             What happens if the vehicle breaks down?
                             </div>
-                        {arrow4 === "downArrow" && <img src="https://www.redbus.in/bushire/static/mwebv2/home/ic-arrow-down-color.svg" alt="" onClick={handleArrow4} />}
+                        {arrow4 === "downArrow" && <img src="/local/placeholder.svg" alt="" onClick={handleArrow4} />}
                         {arrow4 === "upArrow" && <RiArrowDropUpLine style={{ fontSize: "25px" }} onClick={handleArrow4} />}
                     </div>
                     {arrow4 === "upArrow" &&
@@ -231,7 +231,7 @@ const FAQ = () => {
                         <div className={Styles.faqDivText}>
                             How are the Kilometers calculated?
                             </div>
-                        {arrow5 === "downArrow" && <img src="https://www.redbus.in/bushire/static/mwebv2/home/ic-arrow-down-color.svg" alt="" onClick={handleArrow5} />}
+                        {arrow5 === "downArrow" && <img src="/local/placeholder.svg" alt="" onClick={handleArrow5} />}
                         {arrow5 === "upArrow" && <RiArrowDropUpLine style={{ fontSize: "25px" }} onClick={handleArrow5} />}
                     </div>
                     {arrow5 === "upArrow" &&
@@ -241,7 +241,7 @@ const FAQ = () => {
                         <div className={Styles.faqDivText}>
                             What are the payment terms?
                             </div>
-                        {arrow6 === "downArrow" && <img src="https://www.redbus.in/bushire/static/mwebv2/home/ic-arrow-down-color.svg" alt="" onClick={handleArrow6} />}
+                        {arrow6 === "downArrow" && <img src="/local/placeholder.svg" alt="" onClick={handleArrow6} />}
                         {arrow6 === "upArrow" && <RiArrowDropUpLine style={{ fontSize: "25px" }} onClick={handleArrow6} />}
                     </div>
                     {arrow6 === "upArrow" &&
@@ -251,7 +251,7 @@ const FAQ = () => {
                         <div className={Styles.faqDivText}>
                             What if I need to cancel my trip?
                             </div>
-                        {arrow7 === "downArrow" && <img src="https://www.redbus.in/bushire/static/mwebv2/home/ic-arrow-down-color.svg" alt="" onClick={handleArrow7} />}
+                        {arrow7 === "downArrow" && <img src="/local/placeholder.svg" alt="" onClick={handleArrow7} />}
                         {arrow7 === "upArrow" && <RiArrowDropUpLine style={{ fontSize: "25px" }} onClick={handleArrow7} />}
                     </div>
                     {arrow7 === "upArrow" &&
@@ -262,7 +262,7 @@ const FAQ = () => {
                         <div className={Styles.faqDivText}>
                             How are toll & taxes calculated?
                             </div>
-                        {arrow8 === "downArrow" && <img src="https://www.redbus.in/bushire/static/mwebv2/home/ic-arrow-down-color.svg" alt="" onClick={handleArrow8} />}
+                        {arrow8 === "downArrow" && <img src="/local/placeholder.svg" alt="" onClick={handleArrow8} />}
                         {arrow8 === "upArrow" && <RiArrowDropUpLine style={{ fontSize: "25px" }} onClick={handleArrow8} />}
                     </div>
                     {arrow8 === "upArrow" &&
@@ -272,7 +272,7 @@ const FAQ = () => {
                         <div className={Styles.faqDivText}>
                             What are the benefits of booking or renting a vehicle with redBus?
                             </div>
-                        {arrow9 === "downArrow" && <img src="https://www.redbus.in/bushire/static/mwebv2/home/ic-arrow-down-color.svg" alt="" onClick={handleArrow9} />}
+                        {arrow9 === "downArrow" && <img src="/local/placeholder.svg" alt="" onClick={handleArrow9} />}
                         {arrow9 === "upArrow" && <RiArrowDropUpLine style={{ fontSize: "25px" }} onClick={handleArrow9} />}
                     </div>
                     {arrow9 === "upArrow" &&
@@ -282,7 +282,7 @@ const FAQ = () => {
                         <div className={Styles.faqDivText}>
                             What are the COVID-19 measures being taken with redBus?
                             </div>
-                        {arrow10 === "downArrow" && <img src="https://www.redbus.in/bushire/static/mwebv2/home/ic-arrow-down-color.svg" alt="" onClick={handleArrow10} />}
+                        {arrow10 === "downArrow" && <img src="/local/placeholder.svg" alt="" onClick={handleArrow10} />}
                         {arrow10 === "upArrow" && <RiArrowDropUpLine style={{ fontSize: "25px" }} onClick={handleArrow10} />}
                     </div>
                     {arrow10 === "upArrow" &&
@@ -292,7 +292,7 @@ const FAQ = () => {
                         <div className={Styles.faqDivText}>
                             How long is redBus Bus Hire customer care available?
                             </div>
-                        {arrow11 === "downArrow" && <img src="https://www.redbus.in/bushire/static/mwebv2/home/ic-arrow-down-color.svg" alt="" onClick={handleArrow11} />}
+                        {arrow11 === "downArrow" && <img src="/local/placeholder.svg" alt="" onClick={handleArrow11} />}
                         {arrow11 === "upArrow" && <RiArrowDropUpLine style={{ fontSize: "25px" }} onClick={handleArrow11} />}
                     </div>
                     {arrow11 === "upArrow" &&
@@ -302,7 +302,7 @@ const FAQ = () => {
                         <div className={Styles.faqDivText}>
                             Will there be blankets and linens provided in a complementary fashion aboard the Vehicle with redBus?
                             </div>
-                        {arrow12 === "downArrow" && <img src="https://www.redbus.in/bushire/static/mwebv2/home/ic-arrow-down-color.svg" alt="" onClick={handleArrow12} />}
+                        {arrow12 === "downArrow" && <img src="/local/placeholder.svg" alt="" onClick={handleArrow12} />}
                         {arrow12 === "upArrow" && <RiArrowDropUpLine style={{ fontSize: "25px" }} onClick={handleArrow12} />}
                     </div>
                     {arrow12 === "upArrow" &&

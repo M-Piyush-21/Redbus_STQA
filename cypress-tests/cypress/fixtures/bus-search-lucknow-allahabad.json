@@ -1,0 +1,34 @@
+{
+  "route": {
+    "_id": "sample-route-lucknow-allahabad",
+    "departureLocation": { "name": "Lucknow", "subLocations": ["Charbagh"] },
+    "arrivalLocation": { "name": "Allahabad", "subLocations": ["Civil Lines"] },
+    "duration": 5
+  },
+  "matchedBuses": [
+    {
+      "_id": "sample-bus-4",
+      "operatorName": "Prayagraj Express",
+      "busType": 1,
+      "departureTime": 8,
+      "rating": [6, 10, 14, 18, 22],
+      "liveTracking": 1,
+      "reschedulable": 1,
+      "routes": "sample-route-lucknow-allahabad"
+    },
+    {
+      "_id": "sample-bus-5",
+      "operatorName": "Ganga Travels",
+      "busType": 3,
+      "departureTime": 16,
+      "rating": [4, 8, 12, 16, 20],
+      "liveTracking": 1,
+      "reschedulable": 0,
+      "routes": "sample-route-lucknow-allahabad"
+    }
+  ],
+  "busIdWithSeatsObj": {
+    "sample-bus-4": [],
+    "sample-bus-5": ["C1"]
+  }
+}

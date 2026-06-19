@@ -1,0 +1,11 @@
+{
+  "_id": "sample-hire-1",
+  "vehicle": "Tempo Traveller 12 Seater",
+  "img": "/local/placeholder.svg",
+  "total": 8500,
+  "price": 4913,
+  "available": true,
+  "seater": 12,
+  "music": true,
+  "charging": true
+}

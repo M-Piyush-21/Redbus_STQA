@@ -34,8 +34,8 @@ const SubRoutes = ({
     boardingStyle = activeStyle;
   }
 
-  const boardingSubpoints = routeDetails["departureLocation"]["subLocations"];
-  const destinationSubpoints = routeDetails["arrivalLocation"]["subLocations"];
+  const boardingSubpoints = routeDetails?.departureLocation?.subLocations || [];
+  const destinationSubpoints = routeDetails?.arrivalLocation?.subLocations || [];
 
   const handleBoardChange = (e) => {
     setBoardPoint(e.target.value);

@@ -14,19 +14,22 @@ const busServiceReducer = (state = initState, { type, payload }) => {
         ...state,
         isLoading: true,
         error: false,
+        currentBus: {},
       };
     case actionTypes.GET_BUS_MONGO_SUCCESS:
       return {
         ...state,
         isLoading: false,
         error: false,
-        busList: [...payload],
+        busList: [...(payload || [])],
       };
     case actionTypes.GET_BUS_MONGO_FAILURE:
       return {
         ...state,
         isLoading: false,
         error: true,
+        currentBus: {},
+        busList: [],
       };
     case actionTypes.GET_BUS_MONGO_ID_SUCCESS:
       return {

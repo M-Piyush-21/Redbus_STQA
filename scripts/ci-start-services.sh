@@ -17,4 +17,5 @@ echo $! > /tmp/redbus-frontend.pid
 
 bash "$ROOT/scripts/ci-wait-for-url.sh" "http://localhost:3020/v1/api/routes" 120
 bash "$ROOT/scripts/ci-wait-for-url.sh" "http://localhost:3000" 120
+sleep 5
 echo "App services are up."

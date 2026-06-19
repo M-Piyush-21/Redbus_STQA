@@ -27,43 +27,47 @@ const BusBox = ({
 }) => {
   // capturing duration in redux store
   let dispatch = useDispatch();
+  const safeRating = rating || [0, 0, 0, 0, 0];
+  const safeFilledSeats = filledSeats || [];
+  const safeRoute = routeDetails || {};
+  const routeDuration = Number(safeRoute.duration) || 0;
+
   React.useEffect(() => {
     const payload1 = {
       key: "duration",
-      value: routeDetails["duration"],
+      value: routeDuration,
     };
 
     dispatch(updateBookingDetails(payload1));
-  }, [routeDetails,dispatch]);
+  }, [routeDuration, dispatch]);
 
   var avgRating = 0;
   var totalReviews = 0;
-  rating.forEach((item, index) => {
+  safeRating.forEach((item, index) => {
     avgRating += (index + 1) * item;
     totalReviews += item;
   });
 
-  avgRating = (avgRating / totalReviews).toFixed(1);
+  avgRating = totalReviews > 0 ? (avgRating / totalReviews).toFixed(1) : "0.0";
 
   var seatPrice = 0;
   var busTypeName = "";
   if (busType === 1) {
-    seatPrice = 50 * Math.floor(routeDetails["duration"] / 2);
+    seatPrice = 50 * Math.floor(routeDuration / 2);
     busTypeName = "Seater";
   } else if (busType === 2) {
-    seatPrice = 100 * Math.floor(routeDetails["duration"] / 2);
+    seatPrice = 100 * Math.floor(routeDuration / 2);
     busTypeName = "Sleeper";
   } else if (busType === 3) {
-    seatPrice = 125 * Math.floor(routeDetails["duration"] / 2);
+    seatPrice = 125 * Math.floor(routeDuration / 2);
     busTypeName = "A/C Seater";
   } else {
-    seatPrice = 75 * Math.floor(routeDetails["duration"] / 2);
+    seatPrice = 75 * Math.floor(routeDuration / 2);
     busTypeName = "Non - A/C";
   }
 
   var busDepartureTime = departureTime;
-  var busArrivalTime =
-    (Number(departureTime) + Number(routeDetails["duration"])) % 24;
+  var busArrivalTime = (Number(departureTime) + routeDuration) % 24;
   return (
     <div className={styles.busBox}>
       <div className={styles.busBoxSection1}>
@@ -73,14 +77,14 @@ const BusBox = ({
         </div>
         <div className={styles.busBoxSection12}>
           <div>{busDepartureTime}:00</div>
-          <div>{routeDetails["departureLocation"]["name"]}</div>
+          <div>{safeRoute.departureLocation?.name || ""}</div>
         </div>
         <div className={styles.busBoxSection13}>
-          <div>{routeDetails["duration"]}&nbsp;h</div>
+          <div>{routeDuration}&nbsp;h</div>
         </div>
         <div className={styles.busBoxSection14}>
           <div>{busArrivalTime}:00</div>
-          <div>{routeDetails["arrivalLocation"]["name"]}</div>
+          <div>{safeRoute.arrivalLocation?.name || ""}</div>
         </div>
         <div className={styles.busBoxSection15}>
           <div>
@@ -105,7 +109,7 @@ const BusBox = ({
         <div className={styles.busBoxSection17}>
           <div></div>
           <div>
-            <div>{40 - filledSeats.length}</div>
+            <div>{40 - safeFilledSeats.length}</div>
             <div>Seats Available</div>
           </div>
           <div>
@@ -186,9 +190,9 @@ const BusBox = ({
       </div>
       <div className={styles.busBoxSection3}>
         <BottomTabs
-          filledSeats={filledSeats}
+          filledSeats={safeFilledSeats}
           seatPrice={seatPrice}
-          routeDetails={routeDetails}
+          routeDetails={safeRoute}
           busId={_id}
           busArrivalTime={busArrivalTime}
           busDepartureTime={busDepartureTime}

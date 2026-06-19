@@ -8,7 +8,8 @@ import { useLocation } from "react-router-dom";
 
 const BusServiceCardPage = () => {
   const busList = useSelector((state) => state.busServiceReducer.busList);
-  console.log(busList);
+  const isLoading = useSelector((state) => state.busServiceReducer.isLoading);
+  const error = useSelector((state) => state.busServiceReducer.error);
   const dispatch = useDispatch();
 
   //const history = useHistory();
@@ -30,12 +31,21 @@ const BusServiceCardPage = () => {
     <div className={design.mainContainer} data-testid="bus-hire-card-page">
       <div className={design.leftContainer}>
         <h1 style={{ textTransform: "none", marginTop : "30px" , marginBottom : "20px"}}>
-          We have {busList.length !== 0 ? busList.length : 0} quotations for you
+          We have {busList.length} quotations for you
         </h1>
+        {isLoading && <p data-testid="bus-hire-card-loading">Loading quotations...</p>}
+        {error && (
+          <p data-testid="bus-hire-card-error">
+            Unable to load vehicles. Please refresh and try again.
+          </p>
+        )}
+        {!isLoading && !error && busList.length === 0 && (
+          <p data-testid="bus-hire-card-empty">No vehicles available for this route.</p>
+        )}
         <div className={design.cardContainer}>
           {busList?.map((item) => {
             return (
-              <div className={design.card}>
+              <div className={design.card} key={item._id}>
                 <div className={design.imgBox}>
                   <img src={item.img} alt="" />
                 </div>
@@ -77,7 +87,7 @@ const BusServiceCardPage = () => {
         {/* <div className={design.blueContainer}>
           <img
             style={{ display: "inline-block", marginRight: "16px" }}
-            src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn3.iconfinder.com%2Fdata%2Ficons%2Fmoney-icons%2F100%2F1-512.png&f=1&nofb=1"
+            src="/local/placeholder.svg"
             alt=""
             height="60px"
           />
@@ -88,7 +98,7 @@ const BusServiceCardPage = () => {
         {/* <div className={design.blueContainer}>
           <img
             style={{ display: "inline-block", marginRight: "16px" }}
-            src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.4QKxNTpVlc7F3vqAPsb_NgHaHa%26pid%3DApi&f=1"
+            src="/local/placeholder.svg"
             alt=""
             height="60px"
           />
@@ -99,7 +109,7 @@ const BusServiceCardPage = () => {
         <div className={design.safetyContainer}>
           <div className={design.BusimgBox}>
             <img
-              src="https://s3.rdbuz.com/Images/webplatform/measures/safetyplus.svg"
+              src="/local/placeholder.svg"
               alt=""
             />
           </div>

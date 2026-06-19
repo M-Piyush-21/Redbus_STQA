@@ -177,7 +177,7 @@ body {
   object-fit: contain;
   margin-bottom: 24px;
   border-radius: 8px;
-  background: url("https://www.redbus.in/bushire/static/mwebv2/home/group%20(1).svg");
+  background: #e6f2ff;
   background-size: cover;
   margin: 20px 0px;
 }
@@ -187,7 +187,7 @@ body {
   object-fit: contain;
   margin-bottom: 24px;
   border-radius: 8px;
-  background: url("https://www.redbus.in/bushire/static/mwebv2/home/group-2%20(1).svg");
+  background: #e6f2ff;
   background-size: cover;
   margin: 20px 0px;
 }
@@ -197,7 +197,7 @@ body {
   object-fit: contain;
   margin-bottom: 24px;
   border-radius: 8px;
-  background: url("https://www.redbus.in/bushire/static/mwebv2/home/group%20(2).svg");
+  background: #e6f2ff;
   background-size: cover;
   margin: 20px 0px;
   padding: 20px;

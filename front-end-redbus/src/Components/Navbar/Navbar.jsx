@@ -14,7 +14,8 @@ import {
   addCustomerMongo,
 } from "../../Redux/auth/actions";
 import ComingSoonModal from "../../Elements/ComingSoonModal";
-import { GOOGLE_CLIENT_ID } from "../../config";
+import { GOOGLE_CLIENT_ID, USE_SAMPLE_DATA } from "../../config";
+import { demoCustomer } from "../../mocks/sampleData";
 import { useHistory } from "react-router-dom";
 const Navbar = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -54,7 +55,7 @@ const Navbar = () => {
       <ComingSoonModal isOpen={isModelOpen} setIsOpen={setIsModelOpen} />
       <div className={styles.leftSide_header}>
         <img
-          src="https://www.redbus.in/i/59538b35953097248522a65b4b79650e.png"
+          src="/local/placeholder.svg"
           alt="logo"
           onClick={() => {
             history.push("/");
@@ -62,7 +63,7 @@ const Navbar = () => {
         />
         <ul className={styles.Navbar__listOne}>
           <li>
-            <Link to="/">BUS TICKETS</Link>
+            <Link to="/" data-testid="bus-tickets-link">BUS TICKETS</Link>
           </li>
           <li onClick={() => setIsOpen(true)}>
             rPool<sup>New</sup>
@@ -161,20 +162,47 @@ const Navbar = () => {
                   onClose={handleClose2}
                 >
                   <MenuItem onClick={handleClose2}>
-                    <GoogleLogin
-                      clientId={GOOGLE_CLIENT_ID}
-                      uxMode="popup"
-                      onSuccess={(response) => {
-                        console.log(
-                          "---------------------------CALLED-------------------------------"
-                        );
-                        dispatch(loginSuccess(response));
-                        dispatch(addCustomerMongo(response.profileObj));
-                      }}
-                      onFailure={(response) => {
-                        dispatch(loginFailure(response));
-                      }}
-                    />
+                    {USE_SAMPLE_DATA ? (
+                      <button
+                        type="button"
+                        data-testid="demo-login-btn"
+                        onClick={() => {
+                          dispatch(
+                            loginSuccess({
+                              profileObj: {
+                                name: demoCustomer.name,
+                                email: demoCustomer.email,
+                                googleId: demoCustomer.googleId,
+                                imageUrl: demoCustomer.profilePicture,
+                              },
+                            })
+                          );
+                          dispatch(
+                            addCustomerMongo({
+                              name: demoCustomer.name,
+                              email: demoCustomer.email,
+                              googleId: demoCustomer.googleId,
+                              imageUrl: demoCustomer.profilePicture,
+                            })
+                          );
+                          handleClose2();
+                        }}
+                      >
+                        Demo Login
+                      </button>
+                    ) : (
+                      <GoogleLogin
+                        clientId={GOOGLE_CLIENT_ID}
+                        uxMode="popup"
+                        onSuccess={(response) => {
+                          dispatch(loginSuccess(response));
+                          dispatch(addCustomerMongo(response.profileObj));
+                        }}
+                        onFailure={(response) => {
+                          dispatch(loginFailure(response));
+                        }}
+                      />
+                    )}
                   </MenuItem>
                 </Menu>
               )}

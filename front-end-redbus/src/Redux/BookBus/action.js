@@ -38,5 +38,18 @@ export const getBusDetails = (depart, arrival, date) => (dispatch) => {
   axios
     .get(apiUrl(`/v1/api/routes/${depart}/${arrival}/${date}`))
     .then((res) => dispatch(busDetailsSuccess(res.data)))
-    .catch((err) => dispatch(busDetailsFail()));
+    .catch((err) => {
+      if (err.response?.status === 404) {
+        const body = err.response.data || {};
+        dispatch(
+          busDetailsSuccess({
+            route: body.route || null,
+            matchedBuses: body.matchedBuses || [],
+            busIdWithSeatsObj: body.busIdWithSeatsObj || {},
+          })
+        );
+        return;
+      }
+      dispatch(busDetailsFail());
+    });
 };

@@ -1,80 +1,129 @@
 /**
- * Fallback E2E runner when Cypress cannot start (e.g. macOS 25+).
- * Runs the same 6 flows with Puppeteer + assertions.
+ * Puppeteer fallback — runs the same 6 UNIQUE Cypress flows when Cypress won't start.
  */
 const puppeteer = require("puppeteer");
+const http = require("http");
 const fs = require("fs");
 const path = require("path");
 
+function findChrome() {
+  const fromEnv = process.env.PUPPETEER_EXECUTABLE_PATH || process.env.CHROME_PATH;
+  if (fromEnv && fs.existsSync(fromEnv)) return fromEnv;
+  const candidates = [
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    "/Applications/Chromium.app/Contents/MacOS/Chromium",
+    "/usr/bin/google-chrome",
+    "/usr/bin/chromium-browser",
+    "/usr/bin/chromium",
+  ];
+  return candidates.find((p) => fs.existsSync(p));
+}
+
 const BASE = process.env.CYPRESS_baseUrl || "http://localhost:3000";
+const API = process.env.API_URL || "http://localhost:3020";
 const DATE = "2026-12-20";
 const resultsDir = path.join(__dirname, "cypress", "results");
 fs.mkdirSync(resultsDir, { recursive: true });
 
+function apiGet(urlPath) {
+  return new Promise((resolve, reject) => {
+    http.get(API + urlPath, (res) => {
+      let d = "";
+      res.on("data", (c) => (d += c));
+      res.on("end", () => resolve(JSON.parse(d)));
+    }).on("error", reject);
+  });
+}
+
+function setDateInput(page, selector, value) {
+  return page.$eval(
+    selector,
+    (el, v) => {
+      el.value = v;
+      el.dispatchEvent(new Event("input", { bubbles: true }));
+      el.dispatchEvent(new Event("change", { bubbles: true }));
+    },
+    value
+  );
+}
+
 const tests = [
   {
-    name: "Flow 1 - Landing page loads",
-    run: async (page) => {
-      await page.goto(BASE + "/");
-      await page.waitForSelector("[data-testid='search-bus-btn']");
-      if (!(await page.$("[data-testid='source-input']"))) throw new Error("source missing");
-    },
-  },
-  {
-    name: "Flow 2 - Bus search",
+    name: "CY-01 Bus search Lucknow to Allahabad",
     run: async (page) => {
       await page.goto(BASE + "/");
       await page.type("[data-testid='source-input']", "Lucknow");
-      await page.type("[data-testid='destination-input']", "Delhi");
-      await page.$eval("[data-testid='date-input']", (el, d) => { el.value = d; el.dispatchEvent(new Event("input", { bubbles: true })); el.dispatchEvent(new Event("change", { bubbles: true })); }, DATE);
+      await page.type("[data-testid='destination-input']", "Allahabad");
+      await setDateInput(page, "[data-testid='date-input']", DATE);
       await page.click("[data-testid='search-bus-btn']");
-      await page.waitForFunction(() => location.pathname.includes("select-bus"), { timeout: 10000 });
-      const url = page.url();
-      if (!url.includes("departure=Lucknow") || !url.includes("arrival=Delhi")) throw new Error("bad url " + url);
+      await page.waitForFunction(() => location.href.includes("arrival=Allahabad"), { timeout: 10000 });
     },
   },
   {
-    name: "Flow 3 - Select bus page",
+    name: "CY-02 Select bus loads bus list",
     run: async (page) => {
       await page.goto(`${BASE}/select-bus?departure=Lucknow&arrival=Delhi&date=${DATE}`);
-      const text = await page.$eval("[data-testid='select-bus-header']", (el) => el.textContent);
-      if (!text.includes("Lucknow") || !text.includes("Delhi")) throw new Error("header wrong");
+      await page.waitForSelector("[data-testid='bus-list-container']", { timeout: 15000 });
+      const text = await page.$eval("[data-testid='bus-list-container']", (el) => el.textContent);
+      if (text.includes("Unable to load buses")) throw new Error("bus list error");
     },
   },
   {
-    name: "Flow 4 - Bus hire page",
+    name: "CY-03 Bus hire form submit",
     run: async (page) => {
-      await page.goto(BASE + "/");
-      await page.click("[data-testid='bus-hire-link']");
-      await page.waitForFunction(() => location.pathname.includes("bus-hire"));
+      await page.goto(BASE + "/bus-hire?showForm=1", { waitUntil: "networkidle0" });
+      await page.waitForSelector("[data-testid='bus-hire-form']", { visible: true });
+      await page.type("[data-testid='hire-pickup-input']", "Mumbai");
+      await page.type("[data-testid='hire-drop-input']", "Pune");
+      await page.click("[data-testid='hire-proceed-btn']");
+      await page.waitForFunction(() => location.pathname.includes("bus-hire-card"), { timeout: 10000 });
     },
   },
   {
-    name: "Flow 5 - Bus hire quotations",
+    name: "CY-04 Bus hire details page",
     run: async (page) => {
-      await page.goto(`${BASE}/bus-hire-card?pickUp=Mumbai&drop=Pune&pickUpDate=2026-12-20&dropDate=2026-12-21&totalPassengers=4`);
-      await page.waitForSelector("[data-testid='bus-hire-card-page']");
+      await page.goto(
+        `${BASE}/bus-hire-details/sample-hire-1?pickUp=Mumbai&drop=Pune&pickUpDate=2026-12-20&dropDate=2026-12-21&totalPassengers=2`
+      );
+      await page.waitForSelector("[data-testid='bus-hire-details-page']", { timeout: 15000 });
       const html = await page.content();
-      if (!/quotation/i.test(html)) throw new Error("no quotations");
+      if (!html.includes("Trip Summary")) throw new Error("Trip Summary missing");
     },
   },
   {
-    name: "Flow 6 - Profile and error pages",
+    name: "CY-05 Profile hired bus tab",
     run: async (page) => {
       await page.goto(BASE + "/my-profile");
-      await page.waitForSelector("[data-testid='profile-page']");
-      await page.goto(BASE + "/bad-route-xyz");
-      await page.waitForSelector("[data-testid='error-page']");
+      await page.click("[data-testid='hired-bus-tab']");
+      await page.waitForSelector("[data-testid='hired-bus-section']");
+    },
+  },
+  {
+    name: "CY-06 Profile my profile tab",
+    run: async (page) => {
+      await page.goto(BASE + "/my-profile");
+      await page.click("[data-testid='my-profile-tab']");
+      await page.waitForSelector("[data-testid='my-profile-section']");
+      const html = await page.content();
+      if (!html.includes("Contact Details")) throw new Error("Contact Details missing");
     },
   },
 ];
 
 (async () => {
-  const browser = await puppeteer.launch({ headless: "new", args: ["--no-sandbox"] });
+  const chromePath = findChrome();
+  const browser = await puppeteer.launch({
+    headless: "new",
+    args: ["--no-sandbox"],
+    ...(chromePath ? { executablePath: chromePath } : {}),
+  });
   const page = await browser.newPage();
   let passed = 0;
   let failed = 0;
-  const junit = ['<?xml version="1.0" encoding="UTF-8"?>', `<testsuite name="Redbus E2E Fallback" tests="${tests.length}">`];
+  const junit = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    `<testsuite name="Redbus Cypress Fallback" tests="${tests.length}">`,
+  ];
 
   for (const t of tests) {
     const start = Date.now();
@@ -82,18 +131,19 @@ const tests = [
       await t.run(page);
       console.log("PASS", t.name);
       passed++;
-      junit.push(`<testcase name="${t.name}" time="${((Date.now()-start)/1000).toFixed(2)}"/>`);
+      junit.push(`<testcase name="${t.name}" time="${((Date.now() - start) / 1000).toFixed(2)}"/>`);
     } catch (e) {
       console.error("FAIL", t.name, e.message);
       failed++;
-      junit.push(`<testcase name="${t.name}" time="${((Date.now()-start)/1000).toFixed(2)}"><failure>${e.message}</failure></testcase>`);
+      junit.push(
+        `<testcase name="${t.name}" time="${((Date.now() - start) / 1000).toFixed(2)}"><failure>${e.message}</failure></testcase>`
+      );
     }
   }
 
   junit.push("</testsuite>");
   fs.writeFileSync(path.join(resultsDir, "junit-fallback.xml"), junit.join("\n"));
   await browser.close();
-
-  console.log(`\nFallback E2E: ${passed} passed, ${failed} failed`);
+  console.log(`\nCypress fallback: ${passed} passed, ${failed} failed`);
   process.exit(failed > 0 ? 1 : 0);
 })();

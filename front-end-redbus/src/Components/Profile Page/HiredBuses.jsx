@@ -5,36 +5,66 @@ import axios from "axios";
 import { apiUrl } from "../../config";
 import { useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
+
 const HiredBuses = () => {
   const [allBookingsHire, setAllBookingsHire] = React.useState([]);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [loadError, setLoadError] = React.useState(false);
 
   const currentCustomer = useSelector(
     (state) => state.authReducer.currentCustomer
   );
+
   React.useEffect(() => {
-    if (currentCustomer) {
-      let email = currentCustomer.email;
-      console.log("current customer email: ", email);
-      fetchData(email);
+    if (currentCustomer?.email) {
+      fetchData(currentCustomer.email);
+    } else {
+      setAllBookingsHire([]);
+      setLoadError(false);
     }
   }, [currentCustomer]);
 
   async function fetchData(email) {
-    let res = await axios.get(apiUrl(`/v1/api/bookingHire/${email}`));
-    console.log("all bookings hire of this customer: ", res.data);
-    setAllBookingsHire(res.data);
+    setIsLoading(true);
+    setLoadError(false);
+    try {
+      const res = await axios.get(apiUrl(`/v1/api/bookingHire/${email}`));
+      setAllBookingsHire(Array.isArray(res.data) ? res.data : []);
+    } catch {
+      setAllBookingsHire([]);
+      setLoadError(true);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
-  const renderHiredBookings = () => {
-    console.log("All Hired bookings: ", allBookingsHire);
-    if (allBookingsHire.length === 0) {
-      return <h1>No Hired Bus Bookings Found!</h1>;
-    }
-    return allBookingsHire
-      .reverse()
-      .map((booking) => <SingleHiredBus key={uuidv4()} booking={booking} />);
-  };
-  return <div className={styles.HiredBuses}>{renderHiredBookings()}</div>;
+  if (isLoading) {
+    return <div className={styles.HiredBuses}>Loading hired buses...</div>;
+  }
+
+  if (loadError) {
+    return (
+      <div className={styles.HiredBuses}>
+        Unable to load hired bus bookings right now.
+      </div>
+    );
+  }
+
+  if (allBookingsHire.length === 0) {
+    return (
+      <div className={styles.HiredBuses}>
+        <h1>No Hired Bus Bookings Found!</h1>
+      </div>
+    );
+  }
+
+  return (
+    <div className={styles.HiredBuses}>
+      {[...allBookingsHire].reverse().map((booking) => (
+        <SingleHiredBus key={uuidv4()} booking={booking} />
+      ))}
+    </div>
+  );
 };
 
 export default HiredBuses;

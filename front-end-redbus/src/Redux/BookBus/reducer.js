@@ -60,9 +60,9 @@ export const busDetailsReducer = (state = initState, { type, payload }) => {
         isLoading: false,
         isError: false,
         isSuccess: true,
-        routeDetails: payload.route,
-        matchedBuses: payload.matchedBuses,
-        busIdWithSeatsObj: payload.busIdWithSeatsObj,
+        routeDetails: payload.route || {},
+        matchedBuses: payload.matchedBuses || [],
+        busIdWithSeatsObj: payload.busIdWithSeatsObj || {},
       };
 
     case UPDATE_BOOKING_DETAILS:

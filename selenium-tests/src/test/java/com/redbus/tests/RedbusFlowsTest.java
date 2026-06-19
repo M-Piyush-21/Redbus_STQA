@@ -2,99 +2,76 @@ package com.redbus.tests;
 
 import com.redbus.base.BaseTest;
 import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.time.Duration;
+
 /**
- * 6 user flows for college assignment (Selenium + TestNG assertions).
+ * 6 UNIQUE Selenium flows (TestNG assertions).
+ * Cypress and JMeter cover different scenarios.
  */
 public class RedbusFlowsTest extends BaseTest {
 
   private static final String SEARCH_DATE = "2026-12-20";
 
-  // Flow 1: Landing page loads with search form
-  @Test(priority = 1, description = "Flow 1 - Landing page loads")
-  public void flow1_landingPageLoads() {
-    driver.get(baseUrl + "/");
-    Assert.assertTrue(
-        driver.findElement(By.cssSelector("[data-testid='search-bus-btn']")).isDisplayed(),
-        "Search Bus button should be visible");
-    Assert.assertTrue(
-        driver.findElement(By.cssSelector("[data-testid='source-input']")).isDisplayed(),
-        "Source input should be visible");
-    Assert.assertTrue(
-        driver.findElement(By.cssSelector("[data-testid='destination-input']")).isDisplayed(),
-        "Destination input should be visible");
+  @Test(priority = 1, description = "SL-01 Navbar and landing search form")
+  public void sl01_navbarAndLandingForm() {
+    driver.get(baseUrl + "/bus-hire");
+    driver.findElement(By.cssSelector("[data-testid='bus-tickets-link']")).click();
+    Assert.assertTrue(driver.getCurrentUrl().endsWith("/") || driver.getCurrentUrl().contains("localhost:3000/"),
+        "BUS TICKETS should navigate home");
+    Assert.assertTrue(driver.findElement(By.cssSelector("[data-testid='search-bus-btn']")).isDisplayed());
+    Assert.assertTrue(driver.findElement(By.cssSelector("[data-testid='date-input']")).isDisplayed());
   }
 
-  // Flow 2: Bus search (Lucknow -> Delhi)
-  @Test(priority = 2, description = "Flow 2 - Bus search navigation")
-  public void flow2_busSearch() {
+  @Test(priority = 2, description = "SL-02 Bus search Lucknow to Delhi")
+  public void sl02_busSearchLucknowToDelhi() {
     driver.get(baseUrl + "/");
     driver.findElement(By.cssSelector("[data-testid='source-input']")).sendKeys("Lucknow");
     driver.findElement(By.cssSelector("[data-testid='destination-input']")).sendKeys("Delhi");
     driver.findElement(By.cssSelector("[data-testid='date-input']")).sendKeys(SEARCH_DATE);
     driver.findElement(By.cssSelector("[data-testid='search-bus-btn']")).click();
-    Assert.assertTrue(
-        driver.getCurrentUrl().contains("/select-bus"),
-        "Should navigate to select-bus page");
-    Assert.assertTrue(
-        driver.getCurrentUrl().contains("departure=Lucknow"),
-        "URL should contain departure city");
-    Assert.assertTrue(
-        driver.getCurrentUrl().contains("arrival=Delhi"),
-        "URL should contain arrival city");
+    Assert.assertTrue(driver.getCurrentUrl().contains("/select-bus"));
+    Assert.assertTrue(driver.getCurrentUrl().contains("departure=Lucknow"));
+    Assert.assertTrue(driver.getCurrentUrl().contains("arrival=Delhi"));
   }
 
-  // Flow 3: Select bus page shows route header
-  @Test(priority = 3, description = "Flow 3 - Select bus results page")
-  public void flow3_selectBusPage() {
+  @Test(priority = 3, description = "SL-03 Select bus route header")
+  public void sl03_selectBusRouteHeader() {
     driver.get(baseUrl + "/select-bus?departure=Lucknow&arrival=Delhi&date=" + SEARCH_DATE);
-    String headerText =
-        driver.findElement(By.cssSelector("[data-testid='select-bus-header']")).getText();
-    Assert.assertTrue(headerText.contains("Lucknow"), "Header should show departure");
-    Assert.assertTrue(headerText.contains("Delhi"), "Header should show arrival");
-    Assert.assertTrue(headerText.contains(SEARCH_DATE), "Header should show date");
+    String header = driver.findElement(By.cssSelector("[data-testid='select-bus-header']")).getText();
+    Assert.assertTrue(header.contains("Lucknow"));
+    Assert.assertTrue(header.contains("Delhi"));
+    Assert.assertTrue(header.contains(SEARCH_DATE));
   }
 
-  // Flow 4: Bus hire page navigation
-  @Test(priority = 4, description = "Flow 4 - Bus hire page")
-  public void flow4_busHirePage() {
+  @Test(priority = 4, description = "SL-04 Invalid route shows modal")
+  public void sl04_invalidRouteShowsModal() {
+    driver.get(baseUrl + "/");
+    driver.findElement(By.cssSelector("[data-testid='source-input']")).sendKeys("Mumbai");
+    driver.findElement(By.cssSelector("[data-testid='destination-input']")).sendKeys("Pune");
+    driver.findElement(By.cssSelector("[data-testid='date-input']")).sendKeys(SEARCH_DATE);
+    driver.findElement(By.cssSelector("[data-testid='search-bus-btn']")).click();
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[data-testid='routes-modal']")));
+    Assert.assertTrue(driver.findElement(By.cssSelector("[data-testid='routes-modal-table']")).isDisplayed());
+    Assert.assertFalse(driver.getCurrentUrl().contains("/select-bus"));
+  }
+
+  @Test(priority = 5, description = "SL-05 Bus hire page navigation")
+  public void sl05_busHirePageNavigation() {
     driver.get(baseUrl + "/");
     driver.findElement(By.cssSelector("[data-testid='bus-hire-link']")).click();
-    Assert.assertTrue(
-        driver.getCurrentUrl().contains("/bus-hire"),
-        "Should open bus hire page");
-    Assert.assertTrue(
-        driver.getPageSource().contains("Bus Hire"),
-        "Bus hire content should be visible");
+    Assert.assertTrue(driver.getCurrentUrl().contains("/bus-hire"));
+    Assert.assertTrue(driver.getPageSource().contains("Hire a Vehicle"));
   }
 
-  // Flow 5: Bus hire quotations page
-  @Test(priority = 5, description = "Flow 5 - Bus hire quotations")
-  public void flow5_busHireQuotations() {
-    driver.get(
-        baseUrl
-            + "/bus-hire-card?pickUp=Mumbai&drop=Pune&pickUpDate=2026-12-20&dropDate=2026-12-21&totalPassengers=4");
-    Assert.assertTrue(
-        driver.findElement(By.cssSelector("[data-testid='bus-hire-card-page']")).isDisplayed(),
-        "Bus hire card page should load");
-    Assert.assertTrue(
-        driver.getPageSource().toLowerCase().contains("quotation"),
-        "Page should show quotations section");
-  }
-
-  // Flow 6: Profile page + 404 error page
-  @Test(priority = 6, description = "Flow 6 - Profile and error pages")
-  public void flow6_profileAndErrorPage() {
-    driver.get(baseUrl + "/my-profile");
-    Assert.assertTrue(
-        driver.findElement(By.cssSelector("[data-testid='profile-page']")).isDisplayed(),
-        "Profile page should load");
-
-    driver.get(baseUrl + "/this-route-does-not-exist");
-    Assert.assertTrue(
-        driver.findElement(By.cssSelector("[data-testid='error-page']")).isDisplayed(),
-        "404 error page should load");
+  @Test(priority = 6, description = "SL-06 404 error page")
+  public void sl06_errorPage404() {
+    driver.get(baseUrl + "/unknown-page-xyz");
+    Assert.assertTrue(driver.findElement(By.cssSelector("[data-testid='error-page']")).isDisplayed());
   }
 }

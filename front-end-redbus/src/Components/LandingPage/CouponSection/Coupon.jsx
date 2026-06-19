@@ -9,7 +9,7 @@ const Coupon = () => {
           <span>save upto rs 150</span>
           <span className={styles.offerImage}>
             <img
-              src="https://st.redbus.in/Images/INDOFFER/safetyplus/274_147.png"
+              src="/local/placeholder.svg"
               alt="coupon-1"
             />
           </span>
@@ -19,7 +19,7 @@ const Coupon = () => {
           <span>save upto rs 150</span>
           <span className={styles.offerImage}>
             <img
-              src="https://s1.rdbuz.com/images/MobileOffers/amazon/offertile..png"
+              src="/local/placeholder.svg"
               alt="coupon-1"
             />
           </span>
@@ -29,7 +29,7 @@ const Coupon = () => {
           <span>save upto rs 150</span>
           <span className={styles.offerImage}>
             <img
-              src="https://st.redbus.in/Images/APSRTC/new/APSRTC_1.png"
+              src="/local/placeholder.svg"
               alt="coupon-1"
             />
           </span>
@@ -40,7 +40,7 @@ const Coupon = () => {
       <div className={styles.float}>
         <div className={styles.imgBox}>
           <img
-            src="https://s3.rdbuz.com/Images/webplatform/measures/safetyplus.svg"
+            src="/local/placeholder.svg"
             alt="shield"
           />
         </div>

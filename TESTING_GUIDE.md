@@ -1,10 +1,18 @@
 # RedBus College Assignment - Testing Guide
 
-This project includes **6 UI flows** (Selenium + Cypress), **6 API load tests** (JMeter), and **Jenkins CI/CD** setup.
+This project includes **18 unique test cases** — 6 Selenium, 6 Cypress, 6 JMeter — with **no overlap** between tools. See [TEST_CASES.md](TEST_CASES.md) for the full matrix.
 
 ---
 
-## Prerequisites
+## Sample data mode (no live API)
+
+The frontend uses **local sample data** in development (`REACT_APP_USE_SAMPLE_DATA=true` in `front-end-redbus/.env`). No MongoDB or external CDN images are required for UI or Cypress.
+
+- Sample data: `front-end-redbus/src/mocks/sampleData.js`
+- Cypress fixtures: `cypress-tests/cypress/fixtures/`
+- External fonts/CDN removed from `public/index.html`
+
+---
 
 1. **Java 11+** and **Maven** (for Selenium)
 2. **Node.js 16+** (for frontend, backend, Cypress)
@@ -27,21 +35,25 @@ npm start
 cd front-end-redbus
 npm start
 
-# Terminal 3 - Run tests (see below)
+Or use the CI helper (starts backend + frontend, waits until ready):
+
+```bash
+bash scripts/ci-start-services.sh
+# ... run tests ...
+bash scripts/ci-stop-services.sh
 ```
 
 ---
 
-## 6 User Flows (What We Test)
+## 18 Unique Test Cases (by tool)
 
-| # | Flow | Selenium Test | Cypress Test |
-|---|------|---------------|--------------|
-| 1 | Landing page loads | `flow1_landingPageLoads` | Flow 1 |
-| 2 | Bus search (Lucknow → Delhi) | `flow2_busSearch` | Flow 2 |
-| 3 | Select bus results page | `flow3_selectBusPage` | Flow 3 |
-| 4 | Bus hire page | `flow4_busHirePage` | Flow 4 |
-| 5 | Bus hire quotations | `flow5_busHireQuotations` | Flow 5 |
-| 6 | Profile + 404 error page | `flow6_profileAndErrorPage` | Flow 6 |
+| Tool | IDs | Focus |
+|------|-----|--------|
+| **Selenium** | SL-01 … SL-06 | Navbar, Lucknow→Delhi search, select-bus, invalid route modal, bus hire nav, 404 |
+| **Cypress** | CY-01 … CY-06 | Lucknow→Allahabad search, bus list, hire form, hire details, profile tabs |
+| **JMeter** | JM-01 … JM-06 | Routes API, Lucknow→Faizabad route, customers, busservice, bookingHire |
+
+Full descriptions: [TEST_CASES.md](TEST_CASES.md)
 
 ---
 
@@ -69,9 +81,13 @@ mvn clean test -Dheadless=false
 ```bash
 cd cypress-tests
 npm install
-npm run cy:run        # headless
-npm run cy:open       # interactive UI
+npm run test:ci        # tries Cypress, falls back to Puppeteer on macOS 25+
+npm run test:fallback  # Puppeteer (same 6 CY-* tests)
+npm run cy:run         # native Cypress (Linux/Windows Jenkins)
+npm run cy:open        # interactive UI
 ```
+
+> On macOS 25+, native Cypress may fail (`--no-sandbox`). Use `npm run test:fallback` — it runs the same 6 unique CY-* tests.
 
 **Assertions:** Cypress `.should()` chains used in all 6 flows.
 
@@ -79,27 +95,38 @@ npm run cy:open       # interactive UI
 
 ---
 
-## JMeter (6 API Load Tests)
+## JMeter (6 Unique API Tests)
 
-| # | API | Method |
-|---|-----|--------|
-| 1 | `/v1/api/routes` | GET |
-| 2 | `/v1/api/routes/Lucknow/Delhi/{date}` | GET |
-| 3 | `/v1/api/customers` | POST |
-| 4 | `/v1/api/busservice` | GET |
-| 5 | `/v1/api/booking/{customerId}` | GET |
-| 6 | `/v1/api/bookingHire` | POST |
+| ID | API | Method |
+|----|-----|--------|
+| JM-01 | `/v1/api/routes` | GET |
+| JM-02 | `/v1/api/routes/Lucknow/Faizabad/{date}` | GET |
+| JM-03 | `/v1/api/customers` | POST |
+| JM-04 | `/v1/api/busservice` | GET |
+| JM-05 | `/v1/api/busservice/{id}` | GET |
+| JM-06 | `/v1/api/bookingHire` | POST |
 
-**GUI mode:**
+Plan: 5 threads × 1 loop = **30 HTTP samples** (6 APIs per thread).
+
+**GUI mode** (pick one — depends on your current folder):
 
 ```bash
+# from repo root
 jmeter -t jmeter-tests/redbus-api-load-test.jmx
+
+# OR from jmeter-tests/
+cd jmeter-tests && ./run-gui.sh
 ```
 
 **CLI mode (load test):**
 
 ```bash
+# from repo root
+rm -f jmeter-tests/results.jtl
 jmeter -n -t jmeter-tests/redbus-api-load-test.jmx -l jmeter-tests/results.jtl -e -o jmeter-tests/html-report
+
+# OR from jmeter-tests/
+cd jmeter-tests && ./run-cli.sh
 ```
 
 Open `jmeter-tests/html-report/index.html` for dashboard.
@@ -160,9 +187,9 @@ Point Jenkins to this GitHub repo for source code management.
 
 - [ ] Show frontend running on `localhost:3000`
 - [ ] Show backend running on `localhost:3020`
-- [ ] Run `mvn test` in `selenium-tests` → 6 tests pass
-- [ ] Run `npm run cy:run` in `cypress-tests` → 6 tests pass
-- [ ] Open JMeter `.jmx` → run → show Summary Report
+- [ ] Run `mvn test` in `selenium-tests` → 6 SL-* tests pass
+- [ ] Run `npm run test:ci` in `cypress-tests` → 6 CY-* tests pass
+- [ ] Run JMeter CLI → 30 samples, 0% errors (6 JM-* APIs)
 - [ ] Show Jenkins pipeline green build + TestNG dashboard
 - [ ] Explain TestNG assertions (Selenium) vs Cypress `.should()` assertions
 
@@ -174,8 +201,9 @@ Point Jenkins to this GitHub repo for source code management.
 redbus-master/
 ├── front-end-redbus/     # React app
 ├── back-end-redbus/      # Express API
-├── selenium-tests/       # Maven + TestNG + Selenium (6 flows)
-├── cypress-tests/        # Cypress E2E (6 flows)
-├── jmeter-tests/         # JMeter load test (6 APIs)
+├── selenium-tests/       # Maven + TestNG + Selenium (SL-01 … SL-06)
+├── cypress-tests/        # Cypress E2E (CY-01 … CY-06)
+├── jmeter-tests/         # JMeter API load test (JM-01 … JM-06)
+├── TEST_CASES.md         # 18 unique test case matrix
 └── TESTING_GUIDE.md      # This file
 ```

@@ -273,7 +273,7 @@ const BusBookingForm = () => {
             }}
           >
             <img
-              src="https://s1.rdbuz.com/apps/images/india-acko-insurance/luggage.png"
+              src="/local/placeholder.svg"
               alt="insurance"
               class="i-img"
               width="25"
@@ -292,7 +292,7 @@ const BusBookingForm = () => {
             }}
           >
             <img
-              src="https://s1.rdbuz.com/apps/images/india-acko-insurance/accident.png"
+              src="/local/placeholder.svg"
               alt="insurance"
               class="i-img"
               width="25"

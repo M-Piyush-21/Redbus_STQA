@@ -78,7 +78,7 @@ const LandingPage = () => {
         allSources = [
           ...allSources,
           route.departureLocation.name,
-          ...route.departureLocation.subLocations,
+          ...route.departureLocation.subLocations || [],
         ];
       });
       allSources = Array.from(new Set(allSources));
@@ -105,7 +105,7 @@ const LandingPage = () => {
         allDestinations = [
           ...allDestinations,
           route.arrivalLocation.name,
-          ...route.arrivalLocation.subLocations,
+          ...route.arrivalLocation.subLocations || [],
         ];
       });
       allDestinations = Array.from(new Set(allDestinations));
@@ -214,8 +214,8 @@ const LandingPage = () => {
                 var result = false;
                 for (var i = 0; i < Routes.length; i++) {
                   if (
-                    Routes[i][0] === departureTemp &&
-                    Routes[i][1] === arrivalTemp
+                    Routes[i][0].toLowerCase() === departureTemp.toLowerCase() &&
+                    Routes[i][1].toLowerCase() === arrivalTemp.toLowerCase()
                   ) {
                     result = true;
                   }
@@ -248,7 +248,7 @@ const LandingPage = () => {
           }}
         >
           <Fade in={openModal}>
-            <div className={classes.paper}>
+            <div className={classes.paper} data-testid="routes-modal">
               <p id="transition-modal-description">
                 <RoutesModal />
               </p>

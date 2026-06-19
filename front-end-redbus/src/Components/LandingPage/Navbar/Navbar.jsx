@@ -8,7 +8,7 @@ const Navbar = () => {
       <div className={styles.right}>
         <div>
           <img
-            src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fd2908q01vomqb2.cloudfront.net%2Fcb4e5208b4cd87268b208e49452ed6e89a68e0b8%2F2020%2F07%2F01%2Fredbus-logo.png&f=1&nofb=1"
+            src="/local/placeholder.svg"
             alt="red bus logo"
             height="60px"
           />

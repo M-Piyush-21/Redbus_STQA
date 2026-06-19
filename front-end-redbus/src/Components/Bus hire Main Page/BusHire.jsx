@@ -7,13 +7,22 @@ import FAQ from "./FAQ Section/FAQ";
 import BusHirePricing from "./Bus Hire Pricing/BusHirePricing";
 import { BsCircleFill } from "react-icons/bs";
 import { useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 
 const BusHire = () => {
+  const { search } = useLocation();
   const [active, setActive] = React.useState("Type of trip");
   const currentCustomer = useSelector(
     (state) => state.authReducer.currentCustomer
   );
   console.log("BusHire: ", currentCustomer);
+
+  React.useEffect(() => {
+    if (new URLSearchParams(search).get("showForm") === "1") {
+      setActive("Bus Hire Form");
+    }
+  }, [search]);
+
   const handleClick = () => {
     if (active === "Type of trip") {
       setActive("Bus Hire Form");
@@ -33,7 +42,7 @@ const BusHire = () => {
         <div>
           <img
             className={Styles.imageBanner}
-            src="https://www.redbus.in/bushire/static/webv2/home/group-3%20(4).svg"
+            src="/local/placeholder.svg).svg"
             alt="banner"
             width="100%"
           />
@@ -44,7 +53,7 @@ const BusHire = () => {
             </div>
             <div>
               <img
-                src="https://www.redbus.in/bushire/static/webv2/home/3%20(1).svg"
+                src="/local/placeholder.svg).svg"
                 alt=""
               />
             </div>
@@ -57,7 +66,7 @@ const BusHire = () => {
           <div className={Styles.bookInEaschStep}>
             <div>
               <img
-                src="https://www.redbus.in/bushire/static/mwebv2/home/1%20(1).svg"
+                src="/local/placeholder.svg).svg"
                 alt="1"
               />
             </div>
@@ -84,7 +93,7 @@ const BusHire = () => {
             </div>
             <div>
               <img
-                src="https://www.redbus.in/bushire/static/webv2/home/Group.png"
+                src="/local/placeholder.svg"
                 alt=""
                 width="202px"
                 height="144px"
@@ -94,7 +103,7 @@ const BusHire = () => {
           <div className={Styles.bookInEaschStep}>
             <div>
               <img
-                src="https://www.redbus.in/bushire/static/mwebv2/home/2%20(2).svg"
+                src="/local/placeholder.svg).svg"
                 alt="1"
               />
             </div>
@@ -116,7 +125,7 @@ const BusHire = () => {
             </div>
             <div>
               <img
-                src="https://www.redbus.in/bushire/static/webv2/home/2%20(5).svg"
+                src="/local/placeholder.svg).svg"
                 alt=""
                 width="202px"
                 height="144px"
@@ -126,7 +135,7 @@ const BusHire = () => {
           <div className={Styles.bookInEaschStep}>
             <div>
               <img
-                src="https://www.redbus.in/bushire/static/mwebv2/home/3.svg"
+                src="/local/placeholder.svg"
                 alt="1"
               />
             </div>
@@ -148,7 +157,7 @@ const BusHire = () => {
             </div>
             <div>
               <img
-                src="https://www.redbus.in/bushire/static/webv2/home/3%20(1).svg"
+                src="/local/placeholder.svg).svg"
                 alt=""
                 width="202px"
                 height="144px"
@@ -164,7 +173,7 @@ const BusHire = () => {
             <div className={Styles.BusHireFeatures}>
               <div className={Styles.BusHireEachFeature}>
                 <img
-                  src="https://www.redbus.in/bushire/static/mwebv2/home/great-price.svg"
+                  src="/local/placeholder.svg"
                   alt=""
                   height="100px"
                 />
@@ -181,7 +190,7 @@ const BusHire = () => {
             <div className={Styles.BusHireFeatures}>
               <div className={Styles.BusHireEachFeature}>
                 <img
-                  src="https://www.redbus.in/bushire/static/mwebv2/home/safe-vehicles.svg"
+                  src="/local/placeholder.svg"
                   alt=""
                   height="100px"
                 />
@@ -196,7 +205,7 @@ const BusHire = () => {
             <div className={Styles.BusHireFeatures}>
               <div className={Styles.BusHireEachFeature}>
                 <img
-                  src="https://www.redbus.in/bushire/static/mwebv2/home/live-tracking.svg?v=1"
+                  src="/local/placeholder.svg"
                   alt=""
                   height="100px"
                 />
@@ -211,7 +220,7 @@ const BusHire = () => {
             <div className={Styles.BusHireFeatures}>
               <div className={Styles.BusHireEachFeature}>
                 <img
-                  src="https://www.redbus.in/bushire/static/mwebv2/home/customer-support.svg"
+                  src="/local/placeholder.svg"
                   alt=""
                   height="100px"
                 />
@@ -226,7 +235,7 @@ const BusHire = () => {
             <div className={Styles.BusHireFeatures}>
               <div className={Styles.BusHireEachFeature}>
                 <img
-                  src="https://www.redbus.in/bushire/static/mwebv2/home/verified-drivers.svg"
+                  src="/local/placeholder.svg"
                   alt=""
                   height="100px"
                 />
@@ -254,7 +263,7 @@ const BusHire = () => {
           <div className={Styles.bookInEasySteps_heading}>Vehicle Types</div>
           <div className={Styles.vehicleTypeImage}>
             <img
-              src="https://www.redbus.in/bushire/static/webv2/home/group%20(10).svg"
+              src="/local/placeholder.svg).svg"
               alt="Buses and Mini Buses"
             ></img>
             <div className={Styles.vehicleText}>
@@ -267,7 +276,7 @@ const BusHire = () => {
           </div>
           <div className={Styles.vehicleTypeImage}>
             <img
-              src="https://www.redbus.in/bushire/static/webv2/home/group%20(11).svg"
+              src="/local/placeholder.svg).svg"
               alt="Buses and Mini Buses"
             ></img>
             <div className={Styles.vehicleText}>
@@ -281,7 +290,7 @@ const BusHire = () => {
           </div>
           <div className={Styles.vehicleTypeImage}>
             <img
-              src="https://www.redbus.in/bushire/static/webv2/home/group%20(12).svg"
+              src="/local/placeholder.svg).svg"
               alt="Buses and Mini Buses"
             ></img>
             <div className={Styles.vehicleText}>
@@ -318,7 +327,7 @@ const BusHire = () => {
               </div>
 
               <img
-                src="https://www.redbus.in/bushire/static/mwebv2/home/group-89.svg"
+                src="/local/placeholder.svg"
                 alt=""
               />
             </div>
@@ -328,7 +337,7 @@ const BusHire = () => {
               <div style={{ display: "flex", justifyContent: "flex-start" }}>
                 <div>
                   <img
-                    src="https://www.redbus.in/bushire/static/mwebv2/home/logo-safety-plus.svg"
+                    src="/local/placeholder.svg"
                     alt=""
                   />
                 </div>
@@ -354,7 +363,7 @@ const BusHire = () => {
                 </div>
               </div>
               <img
-                src="https://www.redbus.in/bushire/static/mwebv2/home/thermal.svg"
+                src="/local/placeholder.svg"
                 alt=""
               />
             </div>
@@ -452,7 +461,7 @@ const BusHire = () => {
           <div>
             <img
               style={{ marginTop: "30px", height: "300px" }}
-              src="https://www.redbus.in/bushire/static/mwebv2/home/city-list.svg"
+              src="/local/placeholder.svg"
               alt=""
             />
           </div>
@@ -620,4 +629,4 @@ const BusHire = () => {
 };
 
 export default BusHire;
-// https://www.redbus.in/bushire/static/webv2/home/group-4.svg
+// /local/placeholder.svg

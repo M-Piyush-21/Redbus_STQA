@@ -26,7 +26,7 @@ const BusTracker = () => {
       <div className={styles.upperFlexContainer}>
         <div className={styles.imgBox}>
           <img
-            src="https://s3.rdbuz.com/Images/carousel/tmb_img.png"
+            src="/local/placeholder.svg"
             alt="tracker"
           />
         </div>

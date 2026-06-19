@@ -162,8 +162,8 @@ const Right = () => {
 
     if (sortingProperty === "ratings") {
       filteredMatchedBuses.sort((a, b) => {
-        var ratingArr1 = a["rating"];
-        var ratingArr2 = b["rating"];
+        var ratingArr1 = a.rating || [0, 0, 0, 0, 0];
+        var ratingArr2 = b.rating || [0, 0, 0, 0, 0];
 
         var avgRating1 = 0;
         var totalReviews1 = 0;
@@ -172,7 +172,7 @@ const Right = () => {
           totalReviews1 += item;
         });
 
-        avgRating1 = Number((avgRating1 / totalReviews1).toFixed(1));
+        avgRating1 = totalReviews1 > 0 ? Number((avgRating1 / totalReviews1).toFixed(1)) : 0;
 
         var avgRating2 = 0;
         var totalReviews2 = 0;
@@ -181,7 +181,7 @@ const Right = () => {
           totalReviews2 += item;
         });
 
-        avgRating2 = Number((avgRating2 / totalReviews2).toFixed(1));
+        avgRating2 = totalReviews2 > 0 ? Number((avgRating2 / totalReviews2).toFixed(1)) : 0;
 
         return avgRating1 - avgRating2;
       });
@@ -189,19 +189,22 @@ const Right = () => {
   }
 
   return (
-    <div className={styles.Right}>
+    <div className={styles.Right} data-testid="bus-list-container">
       <SortingBar />
       {isLoading && <div>Loading...</div>}
-      {isError && <div>Something went wrong</div>}
+      {isError && <div>Unable to load buses. Please check your connection and try again.</div>}
 
-      {isSuccess && filteredMatchedBuses.length === 0 && <h1>No Bus Found.</h1>}
+      {isSuccess && !isError && filteredMatchedBuses.length === 0 && (
+        <h1>No Bus Found.</h1>
+      )}
 
       {isSuccess &&
         filteredMatchedBuses.map((item) => {
           return (
             <BusBox
+              key={item._id}
               {...item}
-              filledSeats={busIdWithSeatsObj[item._id.toString()]}
+              filledSeats={busIdWithSeatsObj[item._id.toString()] || []}
               routeDetails={routeDetails}
             />
           );
