@@ -27,6 +27,19 @@ Restart Jenkins after installing.
 
 ## 3. Create pipeline jobs
 
+> **Important:** Create a **Pipeline** job — **not** Freestyle / Maven project.
+> Freestyle fails with `Cannot run program "mvn"` because Jenkins does not have Homebrew in PATH,
+> and it never starts the frontend/backend before tests.
+
+### Quick fix (if job already exists but fails)
+
+```bash
+bash jenkins/fix-selenium-job.sh
+brew services restart jenkins-lts
+```
+
+Then Jenkins → **RedBus - Selenium Jenkins** → **Build Now**
+
 ### Option A — Script (fast)
 
 After Jenkins wizard is done:
@@ -44,13 +57,35 @@ brew services restart jenkins-lts
    - Definition: **Pipeline script from SCM**
    - SCM: **Git**
    - Repository URL: `https://github.com/M-Piyush-21/Redbus_STQA.git`
-   - Branch: `*/master`
+   - Branch: `*/master` (**not** `main` — this repo uses `master`)
    - Script Path: `selenium-tests/Jenkinsfile`
 3. **Build Triggers:** ☑ Poll SCM → `H/15 * * * *`
 4. Save → **Build Now**
 
+> **Common failure:** `fatal: couldn't find remote ref refs/heads/main` → change Branch Specifier from `*/main` to `*/master`.
+
 **Job 2: redbus-cypress**
 - Same as above, Script Path: `cypress-tests/Jenkinsfile`
+
+### Option C — Freestyle job (if you already created one)
+
+Do **not** use **Invoke top-level Maven targets** — Jenkins cannot find `mvn`.
+
+Apply the fixed Freestyle config:
+
+```bash
+bash jenkins/fix-freestyle-selenium-job.sh "RedBus -Seleium Jenkins stqa"
+brew services restart jenkins-lts
+```
+
+**Manual Freestyle setup:**
+1. New Item → **Freestyle project**
+2. Git → URL `https://github.com/M-Piyush-21/Redbus_STQA.git`, branch **`*/master`**
+3. Build → **Execute shell** (paste from `jenkins/jobs/redbus-selenium-freestyle.xml`)
+4. Post-build → **Publish JUnit test result report** → `selenium-tests/target/surefire-reports/*.xml`
+5. Post-build → **Publish TestNG Results** → `selenium-tests/target/surefire-reports/testng-results.xml`
+
+**Never set Maven goals to `mvn clean test`** — that runs `mvn mvn clean test` and fails.
 
 ## 4. Post-build actions (auto in Jenkinsfile)
 
@@ -92,3 +127,21 @@ bash scripts/ci-stop-services.sh
 - Java 11+, Maven, Node.js 16+, Chrome
 - Ports 3000 and 3020 free during build
 - Internet (MongoDB Atlas for backend)
+
+## 9. Troubleshooting
+
+| Error | Cause | Fix |
+|-------|--------|-----|
+| `couldn't find remote ref refs/heads/main` | Branch set to `main` | Use **`*/master`** in job Git config |
+| `Couldn't find any revision to build` | Same as above | Branch → `*/master` |
+| `Cannot run program "mvn"` | Freestyle job; Jenkins PATH missing Homebrew | Use **Pipeline** job (`fix-selenium-job.sh`) |
+| Build finishes in &lt;1 second | Wrong branch or job type | Use **Pipeline** job, not Freestyle |
+| `Did not find any matching files` for TestNG | Tests never ran (checkout failed) | Fix branch first, then rebuild |
+| Maven can't find `pom.xml` | Freestyle job at repo root | Use Pipeline with `selenium-tests/Jenkinsfile` |
+
+**Correct job setup:**
+- Job type: **Pipeline** (not Freestyle / Maven project)
+- Branch: **`*/master`**
+- Script Path: **`selenium-tests/Jenkinsfile`**
+
+After fixing config, click **Build Now** again (or restart Jenkins: `brew services restart jenkins-lts`).

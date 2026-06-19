@@ -11,6 +11,8 @@ body {
   padding: 0px 5%;
   padding-top: 20px;
   padding-bottom: 10px;
+  position: relative;
+  z-index: 1000;
 }
 .Navbar li {
   cursor: pointer;
